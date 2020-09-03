@@ -12,9 +12,10 @@ import project.repository.AccountRepository;
 
 import java.util.Calendar;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
-public class AccountService {
+public class AccountService implements UserService{
 
     @Autowired
     AccountRepository accountRepository;
@@ -47,5 +48,19 @@ public class AccountService {
     public Accounts update(Accounts accounts) {
         accounts.setUpdatedAt(Calendar.getInstance().getTimeInMillis());
         return accountRepository.save(accounts);
+    }
+
+    @Override
+    public Accounts login(String email, String password) {
+        Accounts user = accountRepository.findByEmailAndPassword(email, password);
+        String token = UUID.randomUUID().toString()+System.currentTimeMillis();
+        user.setToken(token);
+        Accounts userNew = accountRepository.save(user);
+        return userNew;
+    }
+
+    @Override
+    public Accounts findUserByToken(String token) {
+        return accountRepository.findByToken(token);
     }
 }

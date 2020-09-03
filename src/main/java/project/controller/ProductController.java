@@ -38,18 +38,18 @@ public class ProductController {
         Specification specification = Specification.where(null);
         if (keyword != null && keyword.length() > 0) {
             specification = specification
-                    .and(new ProductSpecification(new SearchCriteria("ProductName", "=", keyword)))
+                    .and(new ProductSpecification(new SearchCriteria("productName", "=", keyword)))
 //                    .or(new ProductSpecification(new SearchCriteria("CategoryName", "=", keyword)))
-                    .or(new ProductSpecification(new SearchCriteria("Description", "=", keyword)));
+                    .or(new ProductSpecification(new SearchCriteria("description", "=", keyword)));
         }
         if (to.isPresent()) {
-            specification = specification.and(new ProductSpecification(new SearchCriteria("ProductPrice", ">=", to.get())));
+            specification = specification.and(new ProductSpecification(new SearchCriteria("productPrice", ">=", to.get())));
         }
         if (from.isPresent()) {
-            specification = specification.and(new ProductSpecification(new SearchCriteria("ProductPrice", "<=", from.get())));
+            specification = specification.and(new ProductSpecification(new SearchCriteria("productPrice", "<=", from.get())));
         }
         if (category.isPresent()) {
-            specification = specification.and(new ProductSpecification(new SearchCriteria("CategoryId", "=", category.get())));
+            specification = specification.and(new ProductSpecification(new SearchCriteria("categoryId", "=", category.get())));
         }
         Page<Product> ProductPage = productService.getList(specification, page, limit);
         return new ResponseEntity<>(new RESTResponse.Success()

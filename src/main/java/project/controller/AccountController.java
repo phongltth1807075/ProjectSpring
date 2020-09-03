@@ -37,15 +37,15 @@ public class AccountController {
         Specification specification = Specification.where(null);
         if (keyword != null && keyword.length() > 0) {
             specification = specification
-                    .and(new ProductSpecification(new SearchCriteria("AccountName", "=", keyword)))
-                    .and(new ProductSpecification(new SearchCriteria("PhoneNumber", "=", keyword)))
-                    .or(new ProductSpecification(new SearchCriteria("Email", "=", keyword)));
+                    .and(new ProductSpecification(new SearchCriteria("accountName", "=", keyword)))
+                    .and(new ProductSpecification(new SearchCriteria("phoneNumber", "=", keyword)))
+                    .or(new ProductSpecification(new SearchCriteria("email", "=", keyword)));
         }
         if (role.isPresent()) {
-            specification = specification.and(new AccountSpecification(new SearchCriteria("RoleId", "=", role.get())));
+            specification = specification.and(new AccountSpecification(new SearchCriteria("roleId", "=", role.get())));
         }
         if (gender.isPresent()) {
-            specification = specification.and(new AccountSpecification(new SearchCriteria("Gender", "=", gender.get())));
+            specification = specification.and(new AccountSpecification(new SearchCriteria("gender", "=", gender.get())));
         }
         Page<Accounts> AccountPage = accountService.getList(specification, page, limit);
         return new ResponseEntity<>(new RESTResponse.Success()
@@ -91,6 +91,13 @@ public class AccountController {
                 .setMessage("Not found")
                 .build(),
                 HttpStatus.NOT_FOUND);
+    }
+
+
+    @RequestMapping(method = RequestMethod.POST, path = "/login")
+    public ResponseEntity<Accounts> login(@RequestParam("email") String email, @RequestParam("password") String password) {
+        Accounts accounts = accountService.login(email, password);
+        return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{id}")

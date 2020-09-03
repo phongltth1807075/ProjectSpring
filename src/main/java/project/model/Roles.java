@@ -9,12 +9,12 @@ import java.util.List;
 public class Roles {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int RoleId;
-    private String RoleName;
-    private long CreatedAt;
-    private long UpdatedAt;
-    private long DeletedAt;
-    private int Status;
+    private int roleId;
+    private String roleName;
+    private long createdAt;
+    private long updatedAt;
+    private long deletedAt;
+    private int status;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "rolesList", cascade = CascadeType.PERSIST)
@@ -23,63 +23,61 @@ public class Roles {
     public Roles() {
     }
 
-    public Roles(int roleId, String roleName, long createdAt, long updatedAt, long deletedAt, int status, List<Accounts> accountsList) {
-        RoleId = roleId;
-        RoleName = roleName;
-        CreatedAt = createdAt;
-        UpdatedAt = updatedAt;
-        DeletedAt = deletedAt;
-        Status = status;
+    public Roles(String roleName, long createdAt, long updatedAt, long deletedAt, int status, List<Accounts> accountsList) {
+        this.roleName = roleName;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
+        this.status = status;
         this.accountsList = accountsList;
     }
 
-
     public int getRoleId() {
-        return RoleId;
+        return roleId;
     }
 
     public void setRoleId(int roleId) {
-        RoleId = roleId;
+        this.roleId = roleId;
     }
 
     public String getRoleName() {
-        return RoleName;
+        return roleName;
     }
 
     public void setRoleName(String roleName) {
-        RoleName = roleName;
+        this.roleName = roleName;
     }
 
     public long getCreatedAt() {
-        return CreatedAt;
+        return createdAt;
     }
 
     public void setCreatedAt(long createdAt) {
-        CreatedAt = createdAt;
+        this.createdAt = createdAt;
     }
 
     public long getUpdatedAt() {
-        return UpdatedAt;
+        return updatedAt;
     }
 
     public void setUpdatedAt(long updatedAt) {
-        UpdatedAt = updatedAt;
+        this.updatedAt = updatedAt;
     }
 
     public long getDeletedAt() {
-        return DeletedAt;
+        return deletedAt;
     }
 
     public void setDeletedAt(long deletedAt) {
-        DeletedAt = deletedAt;
+        this.deletedAt = deletedAt;
     }
 
     public int getStatus() {
-        return Status;
+        return status;
     }
 
     public void setStatus(int status) {
-        Status = status;
+        this.status = status;
     }
 
     public List<Accounts> getAccountsList() {

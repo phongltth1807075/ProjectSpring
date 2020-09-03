@@ -9,16 +9,16 @@ import java.util.List;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int ProductId;
-    private int CategoryId;
-    private String ProductName;
-    private double ProductPrice;
-    private String Description;
-    private long CreatedAt;
-    private long UpdatedAt;
-    private long DeletedAt;
-    private String ImageProduct;
-    private int Status;
+    private int productId;
+    private int categoryId;
+    private String productName;
+    private double productPrice;
+    private String description;
+    private long createdAt;
+    private long updatedAt;
+    private long deletedAt;
+    private String imageProduct;
+    private int status;
 
     @ManyToOne() //EAGER
     @JoinColumn(name = "CategoryId", insertable = false, updatable = false)
@@ -29,96 +29,96 @@ public class Product {
     }
 
     public Product(int categoryId, String productName, double productPrice, String description, long createdAt, long updatedAt, long deletedAt, String imageProduct, int status, Category category) {
-        CategoryId = categoryId;
-        ProductName = productName;
-        ProductPrice = productPrice;
-        Description = description;
-        CreatedAt = createdAt;
-        UpdatedAt = updatedAt;
-        DeletedAt = deletedAt;
-        ImageProduct = imageProduct;
-        Status = status;
+        this.categoryId = categoryId;
+        this.productName = productName;
+        this.productPrice = productPrice;
+        this.description = description;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
+        this.imageProduct = imageProduct;
+        this.status = status;
         this.category = category;
     }
 
     public int getProductId() {
-        return ProductId;
+        return productId;
     }
 
     public void setProductId(int productId) {
-        ProductId = productId;
+        this.productId = productId;
     }
 
     public int getCategoryId() {
-        return CategoryId;
+        return categoryId;
     }
 
     public void setCategoryId(int categoryId) {
-        CategoryId = categoryId;
+        this.categoryId = categoryId;
     }
 
     public String getProductName() {
-        return ProductName;
+        return productName;
     }
 
     public void setProductName(String productName) {
-        ProductName = productName;
+        this.productName = productName;
     }
 
     public double getProductPrice() {
-        return ProductPrice;
+        return productPrice;
     }
 
     public void setProductPrice(double productPrice) {
-        ProductPrice = productPrice;
+        this.productPrice = productPrice;
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     public void setDescription(String description) {
-        Description = description;
+        this.description = description;
     }
 
     public long getCreatedAt() {
-        return CreatedAt;
+        return createdAt;
     }
 
     public void setCreatedAt(long createdAt) {
-        CreatedAt = createdAt;
+        this.createdAt = createdAt;
     }
 
     public long getUpdatedAt() {
-        return UpdatedAt;
+        return updatedAt;
     }
 
     public void setUpdatedAt(long updatedAt) {
-        UpdatedAt = updatedAt;
+        this.updatedAt = updatedAt;
     }
 
     public long getDeletedAt() {
-        return DeletedAt;
+        return deletedAt;
     }
 
     public void setDeletedAt(long deletedAt) {
-        DeletedAt = deletedAt;
+        this.deletedAt = deletedAt;
     }
 
     public String getImageProduct() {
-        return ImageProduct;
+        return imageProduct;
     }
 
     public void setImageProduct(String imageProduct) {
-        ImageProduct = imageProduct;
+        this.imageProduct = imageProduct;
     }
 
     public int getStatus() {
-        return Status;
+        return status;
     }
 
     public void setStatus(int status) {
-        Status = status;
+        this.status = status;
     }
 
     public Category getCategory() {

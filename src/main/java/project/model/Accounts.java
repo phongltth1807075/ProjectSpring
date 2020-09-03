@@ -8,24 +8,24 @@ import java.util.List;
 public class Accounts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int AccountId;
-    private String AccountName;
-    private String PhoneNumber;
-    private String Email;
-    private String Address;
-    private long CreatedAt;
-    private long UpdatedAt;
-    private long DeletedAt;
-    private int Gender;
-    private long Birthday;
-    private int Status;
-    private String Password;
-    private String Token;
+    private int accountId;
+    private String accountName;
+    private String phoneNumber;
+    private String email;
+    private String address;
+    private long createdAt;
+    private long updatedAt;
+    private long deletedAt;
+    private int gender;
+    private long birthday;
+    private int status;
+    private String password;
+    private String token;
 
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "account_role",
-            joinColumns = @JoinColumn(name = "AccountId"),
-            inverseJoinColumns = @JoinColumn(name = "RoleId")
+            joinColumns = @JoinColumn(name = "accountId"),
+            inverseJoinColumns = @JoinColumn(name = "roleId")
     )
     private List<Roles> rolesList;
 
@@ -33,125 +33,124 @@ public class Accounts {
     public Accounts() {
     }
 
-    public Accounts(int accountId, String accountName, String phoneNumber, String email, String address, long createdAt, long updatedAt, long deletedAt, int gender, long birthday, int status, String password, String token, List<Roles> rolesList) {
-        AccountId = accountId;
-        AccountName = accountName;
-        PhoneNumber = phoneNumber;
-        Email = email;
-        Address = address;
-        CreatedAt = createdAt;
-        UpdatedAt = updatedAt;
-        DeletedAt = deletedAt;
-        Gender = gender;
-        Birthday = birthday;
-        Status = status;
-        Password = password;
-        Token = token;
+    public Accounts(String accountName, String phoneNumber, String email, String address, long createdAt, long updatedAt, long deletedAt, int gender, long birthday, int status, String password, String token, List<Roles> rolesList) {
+        this.accountName = accountName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
+        this.gender = gender;
+        this.birthday = birthday;
+        this.status = status;
+        this.password = password;
+        this.token = token;
         this.rolesList = rolesList;
     }
 
     public int getAccountId() {
-        return AccountId;
+        return accountId;
     }
 
     public void setAccountId(int accountId) {
-        AccountId = accountId;
+        this.accountId = accountId;
     }
 
     public String getAccountName() {
-        return AccountName;
+        return accountName;
     }
 
     public void setAccountName(String accountName) {
-        AccountName = accountName;
+        this.accountName = accountName;
     }
 
     public String getPhoneNumber() {
-        return PhoneNumber;
+        return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        PhoneNumber = phoneNumber;
+        this.phoneNumber = phoneNumber;
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        Email = email;
+        this.email = email;
     }
 
     public String getAddress() {
-        return Address;
+        return address;
     }
 
     public void setAddress(String address) {
-        Address = address;
+        this.address = address;
     }
 
     public long getCreatedAt() {
-        return CreatedAt;
+        return createdAt;
     }
 
     public void setCreatedAt(long createdAt) {
-        CreatedAt = createdAt;
+        this.createdAt = createdAt;
     }
 
     public long getUpdatedAt() {
-        return UpdatedAt;
+        return updatedAt;
     }
 
     public void setUpdatedAt(long updatedAt) {
-        UpdatedAt = updatedAt;
+        this.updatedAt = updatedAt;
     }
 
     public long getDeletedAt() {
-        return DeletedAt;
+        return deletedAt;
     }
 
     public void setDeletedAt(long deletedAt) {
-        DeletedAt = deletedAt;
+        this.deletedAt = deletedAt;
     }
 
     public int getGender() {
-        return Gender;
+        return gender;
     }
 
     public void setGender(int gender) {
-        Gender = gender;
+        this.gender = gender;
     }
 
     public long getBirthday() {
-        return Birthday;
+        return birthday;
     }
 
     public void setBirthday(long birthday) {
-        Birthday = birthday;
+        this.birthday = birthday;
     }
 
     public int getStatus() {
-        return Status;
+        return status;
     }
 
     public void setStatus(int status) {
-        Status = status;
+        this.status = status;
     }
 
     public String getPassword() {
-        return Password;
+        return password;
     }
 
     public void setPassword(String password) {
-        Password = password;
+        this.password = password;
     }
 
     public String getToken() {
-        return Token;
+        return token;
     }
 
     public void setToken(String token) {
-        Token = token;
+        this.token = token;
     }
 
     public List<Roles> getRolesList() {
@@ -161,5 +160,4 @@ public class Accounts {
     public void setRolesList(List<Roles> rolesList) {
         this.rolesList = rolesList;
     }
-
 }

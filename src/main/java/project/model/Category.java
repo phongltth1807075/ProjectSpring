@@ -13,85 +13,82 @@ import java.util.Set;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int CategoryId;
-    private String CategoryName;
-    private String Description;
-    private long CreatedAt;
-    private long UpdatedAt;
-    private long DeletedAt;
-    private int Status;
+    private int categoryId;
+    private String categoryName;
+    private String description;
+    private long createdAt;
+    private long updatedAt;
+    private long deletedAt;
+    private int status;
 
     @JsonIgnore
     @OneToMany(mappedBy = "category")
     private List<Product> products;
 
     public Category(String categoryName, String description, long createdAt, long updatedAt, long deletedAt, int status, List<Product> products) {
-        CategoryName = categoryName;
-        Description = description;
-        CreatedAt = createdAt;
-        UpdatedAt = updatedAt;
-        DeletedAt = deletedAt;
-        Status = status;
+        this.categoryName = categoryName;
+        this.description = description;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
+        this.status = status;
         this.products = products;
     }
 
-    public Category() {
-    }
-
     public int getCategoryId() {
-        return CategoryId;
+        return categoryId;
     }
 
     public void setCategoryId(int categoryId) {
-        CategoryId = categoryId;
+        this.categoryId = categoryId;
     }
 
     public String getCategoryName() {
-        return CategoryName;
+        return categoryName;
     }
 
     public void setCategoryName(String categoryName) {
-        CategoryName = categoryName;
+        this.categoryName = categoryName;
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     public void setDescription(String description) {
-        Description = description;
+        this.description = description;
     }
 
     public long getCreatedAt() {
-        return CreatedAt;
+        return createdAt;
     }
 
     public void setCreatedAt(long createdAt) {
-        CreatedAt = createdAt;
+        this.createdAt = createdAt;
     }
 
     public long getUpdatedAt() {
-        return UpdatedAt;
+        return updatedAt;
     }
 
     public void setUpdatedAt(long updatedAt) {
-        UpdatedAt = updatedAt;
+        this.updatedAt = updatedAt;
     }
 
     public long getDeletedAt() {
-        return DeletedAt;
+        return deletedAt;
     }
 
     public void setDeletedAt(long deletedAt) {
-        DeletedAt = deletedAt;
+        this.deletedAt = deletedAt;
     }
 
     public int getStatus() {
-        return Status;
+        return status;
     }
 
     public void setStatus(int status) {
-        Status = status;
+        this.status = status;
     }
 
     public List<Product> getProducts() {
