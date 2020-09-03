@@ -1,6 +1,7 @@
 package project.service;
 
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +25,9 @@ public class AccountService {
     }
 
     public Accounts create(Accounts accounts) {
+        String password = accounts.getPassword();
+        String hash = BCrypt.hashpw(password, BCrypt.gensalt(12));
+        accounts.setPassword(hash);
         accounts.setCreatedAt(Calendar.getInstance().getTimeInMillis());
         return accountRepository.save(accounts);
     }
