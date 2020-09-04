@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.model.Accounts;
 import project.repository.AccountRepository;
@@ -52,11 +53,16 @@ public class AccountService implements UserService{
 
     @Override
     public Accounts login(String email, String password) {
-        Accounts user = accountRepository.findByEmailAndPassword(email, password);
-        String token = UUID.randomUUID().toString()+System.currentTimeMillis();
-        user.setToken(token);
-        Accounts userNew = accountRepository.save(user);
-        return userNew;
+        Accounts user = accountRepository.findByEmail(email);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+//        String pass = encoder.encode(password);
+        if (encoder.matches(password, user.getPassword())) {
+            String token = UUID.randomUUID().toString()+System.currentTimeMillis();
+            user.setToken(token);
+            Accounts userNew = accountRepository.save(user);
+            return userNew;
+        }
+        return null;
     }
 
     @Override
