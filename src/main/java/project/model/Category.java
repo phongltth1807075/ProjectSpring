@@ -35,6 +35,9 @@ public class Category {
         this.products = products;
     }
 
+    public Category() {
+    }
+
     public int getCategoryId() {
         return categoryId;
     }

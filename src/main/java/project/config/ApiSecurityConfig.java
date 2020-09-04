@@ -34,7 +34,7 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/api/home").hasAuthority("User")
+                .antMatchers("/products").hasAuthority("User")
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(customAuthEntryPoint);
@@ -42,6 +42,6 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/accounts/login/**","/api/public/**");
+        web.ignoring().antMatchers("/accounts/login/**","/");
     }
 }
