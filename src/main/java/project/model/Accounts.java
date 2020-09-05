@@ -160,4 +160,5 @@ public class Accounts {
     public void setRolesList(List<Roles> rolesList) {
         this.rolesList = rolesList;
     }
+
 }

@@ -40,8 +40,11 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(customAuthEntryPoint);
     }
 
+
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/accounts/login/**","/");
+        web.ignoring().antMatchers("/accounts/login/**");
     }
+
 }
+
