@@ -28,7 +28,6 @@ public class AccountController {
     @Autowired
     AccountService accountService;
 
-    List<Roles> rolesList = (List<Roles>) new Roles();
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Object> getList(
@@ -136,10 +135,6 @@ public class AccountController {
             newAccount.setPassword(accounts.getPassword());
             newAccount.setPhoneNumber(accounts.getPhoneNumber());
             newAccount.setStatus(accounts.getStatus());
-            for (int i = 0; i < accountsUpdate.get().getRolesList().size(); i++) {
-                rolesList.add(accountsUpdate.get().getRolesList().get(i));
-            }
-            newAccount.setRolesList(rolesList);
             accountService.update(newAccount);
             return new ResponseEntity<>(new RESTResponse.Success()
                     .setStatus(HttpStatus.OK.value())
