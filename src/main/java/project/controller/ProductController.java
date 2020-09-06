@@ -29,8 +29,8 @@ public class ProductController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Object> getList(
             @RequestParam(value = "keyword", required = false) String keyword,
-            @RequestParam(value = "from", required = false) Optional<Double> from,
-            @RequestParam(value = "to", required = false) Optional<Double> to,
+            @RequestParam(value = "startPrice", required = false) Optional<Double> startPrice,
+            @RequestParam(value = "endPrice", required = false) Optional<Double> endPrice,
             @RequestParam(defaultValue = "1", required = false) int page,
             @RequestParam(defaultValue = "10", required = false) int limit,
             @RequestParam(value = "category", required = false) Optional<Integer> category
@@ -42,11 +42,11 @@ public class ProductController {
 //                    .or(new ProductSpecification(new SearchCriteria("CategoryName", "=", keyword)))
                     .or(new ProductSpecification(new SearchCriteria("description", "=", keyword)));
         }
-        if (to.isPresent()) {
-            specification = specification.and(new ProductSpecification(new SearchCriteria("productPrice", ">=", to.get())));
+        if (startPrice.isPresent()) {
+            specification = specification.and(new ProductSpecification(new SearchCriteria("productPrice", ">=", startPrice.get())));
         }
-        if (from.isPresent()) {
-            specification = specification.and(new ProductSpecification(new SearchCriteria("productPrice", "<=", from.get())));
+        if (endPrice.isPresent()) {
+            specification = specification.and(new ProductSpecification(new SearchCriteria("productPrice", "<=", endPrice.get())));
         }
         if (category.isPresent()) {
             specification = specification.and(new ProductSpecification(new SearchCriteria("categoryId", "=", category.get())));

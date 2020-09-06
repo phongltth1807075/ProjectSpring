@@ -38,9 +38,14 @@ public class AuthenticationProvider extends AbstractUserDetailsAuthenticationPro
         if (accounts == null) {
             throw new UsernameNotFoundException("Token invalid");
         }
+
         Set<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority("Admin"));
-        authorities.add(new SimpleGrantedAuthority("User"));
+        for (int i = 0; i < accounts.getRolesList().size(); i++) {
+            authorities.add(new SimpleGrantedAuthority(accounts.getRolesList().get(i).getRoleName()));
+        }
+
+//        authorities.add(new SimpleGrantedAuthority("User"));
+
         User user = new User(accounts.getEmail(), accounts.getPassword(), authorities);
         return user;
     }

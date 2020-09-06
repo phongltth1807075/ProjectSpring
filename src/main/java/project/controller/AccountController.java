@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import project.dto.AccountDTO;
 import project.model.Accounts;
+import project.model.Roles;
 import project.model.rest.RESTPagination;
 import project.model.rest.RESTResponse;
 import project.model.specification.AccountSpecification;
@@ -16,6 +17,7 @@ import project.model.specification.ProductSpecification;
 import project.model.specification.SearchCriteria;
 import project.service.AccountService;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -25,6 +27,8 @@ public class AccountController {
 
     @Autowired
     AccountService accountService;
+
+    List<Roles> rolesList = (List<Roles>) new Roles();
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Object> getList(
@@ -132,6 +136,10 @@ public class AccountController {
             newAccount.setPassword(accounts.getPassword());
             newAccount.setPhoneNumber(accounts.getPhoneNumber());
             newAccount.setStatus(accounts.getStatus());
+            for (int i = 0; i < accountsUpdate.get().getRolesList().size(); i++) {
+                rolesList.add(accountsUpdate.get().getRolesList().get(i));
+            }
+            newAccount.setRolesList(rolesList);
             accountService.update(newAccount);
             return new ResponseEntity<>(new RESTResponse.Success()
                     .setStatus(HttpStatus.OK.value())
