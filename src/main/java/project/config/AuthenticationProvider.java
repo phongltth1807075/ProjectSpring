@@ -10,10 +10,12 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import project.dto.AccountDTO;
 import project.model.Accounts;
 import project.service.AccountService;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Component
@@ -40,9 +42,11 @@ public class AuthenticationProvider extends AbstractUserDetailsAuthenticationPro
         }
 
         Set<GrantedAuthority> authorities = new HashSet<>();
+
 //        for (int i = 0; i < accounts.getRolesList().size(); i++) {
 //            authorities.add(new SimpleGrantedAuthority(accounts.getRolesList().get(i).getRoleName()));
 //        }
+
         authorities.add(new SimpleGrantedAuthority("User"));
         authorities.add(new SimpleGrantedAuthority("Admin"));
 

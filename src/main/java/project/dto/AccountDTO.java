@@ -1,8 +1,11 @@
 package project.dto;
 
 import project.model.Accounts;
+import project.model.Roles;
 import project.util.DateTimeUtil;
 import project.util.ObjectUtil;
+
+import java.util.List;
 
 public class AccountDTO {
     private int AccountId;
@@ -18,6 +21,7 @@ public class AccountDTO {
     private int Status;
     private String Password;
     private String Token;
+    private List<Roles> rolesList;
 
     public AccountDTO() {
     }
@@ -37,6 +41,7 @@ public class AccountDTO {
         Status = accounts.getStatus();
         Password = accounts.getPassword();
         Token = accounts.getToken();
+        rolesList = accounts.getRolesList();
     }
 
     public int getAccountId() {
@@ -141,5 +146,13 @@ public class AccountDTO {
 
     public void setToken(String token) {
         Token = token;
+    }
+
+    public List<Roles> getRolesList() {
+        return rolesList;
+    }
+
+    public void setRolesList(List<Roles> rolesList) {
+        this.rolesList = rolesList;
     }
 }
