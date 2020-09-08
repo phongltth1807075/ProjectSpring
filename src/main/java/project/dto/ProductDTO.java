@@ -1,5 +1,6 @@
 package project.dto;
 
+import project.model.Accounts;
 import project.model.Category;
 import project.model.Product;
 import project.util.DateTimeUtil;
@@ -16,6 +17,7 @@ public class ProductDTO {
     private String DeletedAt;
     private String ImageProduct;
     private int Status;
+    private Accounts accounts;
 
     public ProductDTO() {
     }
@@ -40,6 +42,23 @@ public class ProductDTO {
         categoryDTO.setDescription(product.getCategory().getDescription());
         categoryDTO.setStatus(product.getCategory().getStatus());
         Category = categoryDTO;
+        accounts = product.getAccounts();
+    }
+
+    public Accounts getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(Accounts accounts) {
+        this.accounts = accounts;
+    }
+
+    public CategoryDTO getCategoryDTO() {
+        return categoryDTO;
+    }
+
+    public void setCategoryDTO(CategoryDTO categoryDTO) {
+        this.categoryDTO = categoryDTO;
     }
 
     public int getProductId() {

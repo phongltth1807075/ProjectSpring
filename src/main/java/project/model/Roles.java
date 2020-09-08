@@ -17,7 +17,7 @@ public class Roles {
     private int status;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "rolesList", cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "rolesList", cascade = CascadeType.PERSIST)
     List<Accounts> accountsList;
 
     public Roles() {

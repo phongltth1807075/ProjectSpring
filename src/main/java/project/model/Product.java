@@ -23,10 +23,15 @@ public class Product {
     private Category category;
 
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "accountId")
+    private Accounts accounts;
+
+
     public Product() {
     }
 
-    public Product(int categoryId, String productName, double productPrice, String description, long createdAt, long updatedAt, long deletedAt, String imageProduct, int status, Category category) {
+    public Product(int categoryId, String productName, double productPrice, String description, long createdAt, long updatedAt, long deletedAt, String imageProduct, int status, Category category, Accounts accounts) {
         this.categoryId = categoryId;
         this.productName = productName;
         this.productPrice = productPrice;
@@ -37,6 +42,7 @@ public class Product {
         this.imageProduct = imageProduct;
         this.status = status;
         this.category = category;
+        this.accounts = accounts;
     }
 
     public int getProductId() {
@@ -125,5 +131,13 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Accounts getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(Accounts accounts) {
+        this.accounts = accounts;
     }
 }

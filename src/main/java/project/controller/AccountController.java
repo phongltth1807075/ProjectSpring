@@ -60,7 +60,7 @@ public class AccountController {
                 HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST,path = "/create")
+    @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Object> create(@RequestBody Accounts accounts) {
         Accounts saveAccount = accountService.create(accounts);
         if (saveAccount != null) {

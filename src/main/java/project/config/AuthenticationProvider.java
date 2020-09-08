@@ -15,6 +15,7 @@ import project.model.Accounts;
 import project.service.AccountService;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -24,7 +25,10 @@ public class AuthenticationProvider extends AbstractUserDetailsAuthenticationPro
     @Autowired
     AccountService accountService;
 
+    List<String> roleId;
+
     @Override
+
     protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) throws AuthenticationException {
 
     }
@@ -37,16 +41,15 @@ public class AuthenticationProvider extends AbstractUserDetailsAuthenticationPro
         }
         String token = String.valueOf(credential);
         Accounts accounts = accountService.findUserByToken(token);
+
         if (accounts == null) {
             throw new UsernameNotFoundException("Token invalid");
         }
-
         Set<GrantedAuthority> authorities = new HashSet<>();
 
 //        for (int i = 0; i < accounts.getRolesList().size(); i++) {
 //            authorities.add(new SimpleGrantedAuthority(accounts.getRolesList().get(i).getRoleName()));
 //        }
-
         authorities.add(new SimpleGrantedAuthority("User"));
         authorities.add(new SimpleGrantedAuthority("Admin"));
 
