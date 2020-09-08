@@ -1,5 +1,7 @@
 package project.model;
 
+import org.hibernate.annotations.Columns;
+
 import javax.persistence.*;
 
 
@@ -18,20 +20,23 @@ public class Product {
     private String imageProduct;
     private int status;
 
+    @Column(name = "account_id")
+    private int accountId;
+
     @ManyToOne() //EAGER
     @JoinColumn(name = "CategoryId", insertable = false, updatable = false)
     private Category category;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "accountId")
+    @OneToOne()
+    @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Accounts accounts;
 
 
     public Product() {
     }
 
-    public Product(int categoryId, String productName, double productPrice, String description, long createdAt, long updatedAt, long deletedAt, String imageProduct, int status, Category category, Accounts accounts) {
+    public Product(int categoryId, String productName, double productPrice, String description, long createdAt, long updatedAt, long deletedAt, String imageProduct, int status, int accountId, Category category, Accounts accounts) {
         this.categoryId = categoryId;
         this.productName = productName;
         this.productPrice = productPrice;
@@ -41,8 +46,17 @@ public class Product {
         this.deletedAt = deletedAt;
         this.imageProduct = imageProduct;
         this.status = status;
+        this.accountId = accountId;
         this.category = category;
         this.accounts = accounts;
+    }
+
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 
     public int getProductId() {

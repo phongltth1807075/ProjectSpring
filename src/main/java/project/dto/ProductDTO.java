@@ -17,7 +17,7 @@ public class ProductDTO {
     private String DeletedAt;
     private String ImageProduct;
     private int Status;
-    private Accounts accounts;
+    private int AccountId;
 
     public ProductDTO() {
     }
@@ -26,6 +26,8 @@ public class ProductDTO {
 
     public ProductDTO(Product product) {
         ObjectUtil.cloneObject(this, product);
+        ProductId=product.getProductId();
+        AccountId=product.getAccountId();
         ProductName = product.getProductName();
         ProductPrice = product.getProductPrice();
         Description = product.getDescription();
@@ -42,23 +44,14 @@ public class ProductDTO {
         categoryDTO.setDescription(product.getCategory().getDescription());
         categoryDTO.setStatus(product.getCategory().getStatus());
         Category = categoryDTO;
-        accounts = product.getAccounts();
     }
 
-    public Accounts getAccounts() {
-        return accounts;
+    public int getAccountId() {
+        return AccountId;
     }
 
-    public void setAccounts(Accounts accounts) {
-        this.accounts = accounts;
-    }
-
-    public CategoryDTO getCategoryDTO() {
-        return categoryDTO;
-    }
-
-    public void setCategoryDTO(CategoryDTO categoryDTO) {
-        this.categoryDTO = categoryDTO;
+    public void setAccountId(int accountId) {
+        AccountId = accountId;
     }
 
     public int getProductId() {
