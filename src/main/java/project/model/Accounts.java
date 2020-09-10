@@ -22,18 +22,22 @@ public class Accounts {
     private String password;
     private String token;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @OneToOne(mappedBy = "accounts")
+    private Product product;
+
+    @ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
     @JoinTable(name = "account_role",
             joinColumns = @JoinColumn(name = "accountId"),
             inverseJoinColumns = @JoinColumn(name = "roleId")
     )
+
     private List<Roles> rolesList;
 
 
     public Accounts() {
     }
 
-    public Accounts(String accountName, String phoneNumber, String email, String address, long createdAt, long updatedAt, long deletedAt, int gender, long birthday, int status, String password, String token, List<Roles> rolesList) {
+    public Accounts(String accountName, String phoneNumber, String email, String address, long createdAt, long updatedAt, long deletedAt, int gender, long birthday, int status, String password, String token, Product product, List<Roles> rolesList) {
         this.accountName = accountName;
         this.phoneNumber = phoneNumber;
         this.email = email;
@@ -46,6 +50,7 @@ public class Accounts {
         this.status = status;
         this.password = password;
         this.token = token;
+        this.product = product;
         this.rolesList = rolesList;
     }
 
@@ -153,6 +158,14 @@ public class Accounts {
         this.token = token;
     }
 
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
     public List<Roles> getRolesList() {
         return rolesList;
     }
@@ -160,5 +173,4 @@ public class Accounts {
     public void setRolesList(List<Roles> rolesList) {
         this.rolesList = rolesList;
     }
-
 }

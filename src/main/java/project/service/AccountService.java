@@ -16,10 +16,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class AccountService implements UserService{
+public class AccountService implements UserService {
 
     @Autowired
     AccountRepository accountRepository;
+//    @Autowired
+//    AccountService accountService;
 
 
     public Page<Accounts> getList(Specification specification, int page, int limit) {
@@ -51,19 +53,25 @@ public class AccountService implements UserService{
         return accountRepository.save(accounts);
     }
 
+
+    public Accounts findByEmail(String email) {
+        return accountRepository.findByEmail(email);
+    }
+
     @Override
     public Accounts login(String email, String password) {
         Accounts user = accountRepository.findByEmail(email);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 //        String pass = encoder.encode(password);
         if (encoder.matches(password, user.getPassword())) {
-            String token = UUID.randomUUID().toString()+System.currentTimeMillis();
+            String token = UUID.randomUUID().toString() + System.currentTimeMillis();
             user.setToken(token);
             Accounts userNew = accountRepository.save(user);
             return userNew;
         }
         return null;
     }
+
 
     @Override
     public Accounts findUserByToken(String token) {
