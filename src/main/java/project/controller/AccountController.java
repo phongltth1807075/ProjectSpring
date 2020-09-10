@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import project.dto.AccountDTO;
 import project.model.Accounts;
-import project.model.Roles;
 import project.model.rest.RESTPagination;
 import project.model.rest.RESTResponse;
 import project.model.specification.AccountSpecification;
@@ -17,7 +16,6 @@ import project.model.specification.ProductSpecification;
 import project.model.specification.SearchCriteria;
 import project.service.AccountService;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -60,29 +58,40 @@ public class AccountController {
                 HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST,path = "/create")
+    @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Object> create(@RequestBody Accounts accounts) {
-        Accounts saveAccount = accountService.create(accounts);
-        if (saveAccount != null) {
-            return new ResponseEntity<>(new RESTResponse.Success()
-                    .setStatus(HttpStatus.CREATED.value())
-                    .setMessage("Action Success")
-                    .addData(saveAccount)
+        Accounts accountsByEmail = accountService.findByEmail(accounts.getEmail());
+        if (accountsByEmail != null) {
+            return new ResponseEntity<>(new RESTResponse.SimpleError()
+                    .setCode(HttpStatus.NOT_FOUND.value())
+                    .setMessage("Account Already Exist")
                     .build(),
-                    HttpStatus.CREATED);
+                    HttpStatus.NOT_FOUND);
+        } else {
+            Accounts saveAccount = accountService.create(accounts);
+            if (saveAccount != null) {
+                return new ResponseEntity<>(new RESTResponse.Success()
+                        .setStatus(HttpStatus.CREATED.value())
+                        .setMessage("Action Success")
+                        .addData(saveAccount)
+                        .build(),
+                        HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>(new RESTResponse.SimpleError()
+                        .setCode(HttpStatus.NOT_FOUND.value())
+                        .setMessage("Not found")
+                        .build(),
+                        HttpStatus.NOT_FOUND);
+            }
         }
-        return new ResponseEntity<>(new RESTResponse.SimpleError()
-                .setCode(HttpStatus.NOT_FOUND.value())
-                .setMessage("Not found")
-                .build(),
-                HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
     public ResponseEntity<Object> delete(@PathVariable int id) {
         Optional<Accounts> exitAccount = accountService.getById(id);
         if (exitAccount.isPresent()) {
-            accountService.delete(exitAccount.get());
+            Accounts accounts = exitAccount.get();
+            accountService.delete(accounts);
             return new ResponseEntity<>(new RESTResponse.Success()
                     .setStatus(HttpStatus.OK.value())
                     .setMessage("Simple Success")
@@ -108,18 +117,28 @@ public class AccountController {
         Optional<Accounts> accounts = accountService.getById(id);
         if (accounts.isPresent()) {
             Accounts accounts1 = accounts.get();
-            return new ResponseEntity<>(new RESTResponse.Success()
-                    .setStatus(HttpStatus.OK.value())
-                    .setMessage("Success")
-                    .addData(accounts1)
+            if (accounts1.getStatus() == 1) {
+                return new ResponseEntity<>(new RESTResponse.Success()
+                        .setStatus(HttpStatus.OK.value())
+                        .setMessage("Success")
+                        .addData(new AccountDTO(accounts1))
+                        .build(),
+                        HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new RESTResponse.Success()
+                        .setStatus(HttpStatus.OK.value())
+                        .setMessage("Account Deleted or DeActive !")
+                        .build(),
+                        HttpStatus.NOT_FOUND);
+            }
+
+        } else {
+            return new ResponseEntity<>(new RESTResponse.SimpleError()
+                    .setCode(HttpStatus.NOT_FOUND.value())
+                    .setMessage("Not found")
                     .build(),
-                    HttpStatus.OK);
+                    HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(new RESTResponse.SimpleError()
-                .setCode(HttpStatus.NOT_FOUND.value())
-                .setMessage("Not found")
-                .build(),
-                HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/{id}")
@@ -135,11 +154,11 @@ public class AccountController {
             newAccount.setPassword(accounts.getPassword());
             newAccount.setPhoneNumber(accounts.getPhoneNumber());
             newAccount.setStatus(accounts.getStatus());
-            accountService.update(newAccount);
+            Accounts accounts1 = accountService.update(newAccount);
             return new ResponseEntity<>(new RESTResponse.Success()
                     .setStatus(HttpStatus.OK.value())
                     .setMessage("Success")
-                    .addData(accountService.update(newAccount))
+                    .addData(new AccountDTO(accounts1))
                     .build(),
                     HttpStatus.OK);
         }

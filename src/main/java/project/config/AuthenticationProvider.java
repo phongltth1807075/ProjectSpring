@@ -43,12 +43,12 @@ public class AuthenticationProvider extends AbstractUserDetailsAuthenticationPro
 
         Set<GrantedAuthority> authorities = new HashSet<>();
 
-//        for (int i = 0; i < accounts.getRolesList().size(); i++) {
-//            authorities.add(new SimpleGrantedAuthority(accounts.getRolesList().get(i).getRoleName()));
-//        }
+        for (int i = 0; i < accounts.getRolesList().size(); i++) {
+            authorities.add(new SimpleGrantedAuthority(accounts.getRolesList().get(i).getRoleName()));
+        }
 
-        authorities.add(new SimpleGrantedAuthority("User"));
-        authorities.add(new SimpleGrantedAuthority("Admin"));
+//        authorities.add(new SimpleGrantedAuthority("User"));
+//        authorities.add(new SimpleGrantedAuthority("Admin"));
 
         User user = new User(accounts.getEmail(), accounts.getPassword(), authorities);
         return user;

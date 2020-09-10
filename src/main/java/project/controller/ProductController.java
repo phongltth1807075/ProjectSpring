@@ -83,16 +83,18 @@ public class ProductController {
     public ResponseEntity<Object> delete(@PathVariable int id) {
         Optional<Product> exitProduct = productService.getById(id);
         if (exitProduct.isPresent()) {
-            productService.delete(exitProduct.get());
-            return new ResponseEntity<>(new RESTResponse.Success()
-                    .setStatus(HttpStatus.OK.value())
-                    .setMessage("Simple Success")
-                    .build(),
-                    HttpStatus.OK);
+            if (exitProduct.get().getStatus() == 1) {
+                productService.delete(exitProduct.get());
+                return new ResponseEntity<>(new RESTResponse.Success()
+                        .setStatus(HttpStatus.OK.value())
+                        .setMessage("Simple Success")
+                        .build(),
+                        HttpStatus.OK);
+            }
         }
         return new ResponseEntity<>(new RESTResponse.SimpleError()
                 .setCode(HttpStatus.NOT_FOUND.value())
-                .setMessage("Not found")
+                .setMessage("Not found or Deleted")
                 .build(),
                 HttpStatus.NOT_FOUND);
     }
@@ -102,18 +104,27 @@ public class ProductController {
         Optional<Product> product = productService.getById(id);
         if (product.isPresent()) {
             Product product1 = product.get();
-            return new ResponseEntity<>(new RESTResponse.Success()
-                    .setStatus(HttpStatus.OK.value())
-                    .setMessage("Success")
-                    .addData(product1)
+            if (product1.getStatus() == 1) {
+                return new ResponseEntity<>(new RESTResponse.Success()
+                        .setStatus(HttpStatus.OK.value())
+                        .setMessage("Success")
+                        .addData(new ProductDTO(product1))
+                        .build(),
+                        HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new RESTResponse.Success()
+                        .setStatus(HttpStatus.OK.value())
+                        .setMessage("Product Deleted or DeActive !")
+                        .build(),
+                        HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity<>(new RESTResponse.SimpleError()
+                    .setCode(HttpStatus.NOT_FOUND.value())
+                    .setMessage("Not found")
                     .build(),
-                    HttpStatus.OK);
+                    HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(new RESTResponse.SimpleError()
-                .setCode(HttpStatus.NOT_FOUND.value())
-                .setMessage("Not found")
-                .build(),
-                HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/{id}")
@@ -126,11 +137,12 @@ public class ProductController {
             newProduct.setImageProduct(product.getImageProduct());
             newProduct.setProductPrice(product.getProductPrice());
             newProduct.setStatus(product.getStatus());
-            productService.update(newProduct);
+            newProduct.setCategoryId(product.getCategoryId());
+            Product productupdate = productService.update(newProduct);
             return new ResponseEntity<>(new RESTResponse.Success()
                     .setStatus(HttpStatus.OK.value())
                     .setMessage("Success")
-                    .addData(productService.update(newProduct))
+                    .addData(new ProductDTO(productupdate))
                     .build(),
                     HttpStatus.OK);
         }

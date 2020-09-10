@@ -1,6 +1,5 @@
 package project.dto;
 
-import project.model.Category;
 import project.model.Product;
 import project.util.DateTimeUtil;
 import project.util.ObjectUtil;
@@ -16,6 +15,7 @@ public class ProductDTO {
     private String DeletedAt;
     private String ImageProduct;
     private int Status;
+    private int AccountId;
 
     public ProductDTO() {
     }
@@ -24,6 +24,8 @@ public class ProductDTO {
 
     public ProductDTO(Product product) {
         ObjectUtil.cloneObject(this, product);
+        ProductId = product.getProductId();
+        AccountId = product.getAccountId();
         ProductName = product.getProductName();
         ProductPrice = product.getProductPrice();
         Description = product.getDescription();
@@ -40,6 +42,15 @@ public class ProductDTO {
         categoryDTO.setDescription(product.getCategory().getDescription());
         categoryDTO.setStatus(product.getCategory().getStatus());
         Category = categoryDTO;
+
+    }
+
+    public int getAccountId() {
+        return AccountId;
+    }
+
+    public void setAccountId(int accountId) {
+        AccountId = accountId;
     }
 
     public int getProductId() {

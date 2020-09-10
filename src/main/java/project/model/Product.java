@@ -17,16 +17,23 @@ public class Product {
     private long deletedAt;
     private String imageProduct;
     private int status;
+    @Column(name = "account_id")
+    private int accountId;
 
     @ManyToOne() //EAGER
     @JoinColumn(name = "CategoryId", insertable = false, updatable = false)
     private Category category;
 
 
+    @OneToOne()
+    @JoinColumn(name = "account_id", insertable = false, updatable = false)
+    private Accounts accounts;
+
+
     public Product() {
     }
 
-    public Product(int categoryId, String productName, double productPrice, String description, long createdAt, long updatedAt, long deletedAt, String imageProduct, int status, Category category) {
+    public Product(int categoryId, String productName, double productPrice, String description, long createdAt, long updatedAt, long deletedAt, String imageProduct, int status, int accountId, Category category, Accounts accounts) {
         this.categoryId = categoryId;
         this.productName = productName;
         this.productPrice = productPrice;
@@ -36,7 +43,9 @@ public class Product {
         this.deletedAt = deletedAt;
         this.imageProduct = imageProduct;
         this.status = status;
+        this.accountId = accountId;
         this.category = category;
+        this.accounts = accounts;
     }
 
     public int getProductId() {
@@ -119,11 +128,27 @@ public class Product {
         this.status = status;
     }
 
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
+    }
+
     public Category getCategory() {
         return category;
     }
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Accounts getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(Accounts accounts) {
+        this.accounts = accounts;
     }
 }
