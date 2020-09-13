@@ -1,5 +1,9 @@
 package project.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -8,6 +12,7 @@ import java.util.List;
 public class Accounts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "account_id")
     private int accountId;
     private String accountName;
     private String phoneNumber;
@@ -25,19 +30,23 @@ public class Accounts {
     @OneToOne(mappedBy = "accounts")
     private Product product;
 
-    @ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
+    @JsonIgnore
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "accounts")
+    private List<OrdersEntity> orderEntity;
+
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name = "account_role",
             joinColumns = @JoinColumn(name = "accountId"),
             inverseJoinColumns = @JoinColumn(name = "roleId")
     )
-
     private List<Roles> rolesList;
 
 
     public Accounts() {
     }
 
-    public Accounts(String accountName, String phoneNumber, String email, String address, long createdAt, long updatedAt, long deletedAt, int gender, long birthday, int status, String password, String token, Product product, List<Roles> rolesList) {
+    public Accounts(String accountName, String phoneNumber, String email, String address, long createdAt, long updatedAt, long deletedAt, int gender, long birthday, int status, String password, String token, Product product, List<OrdersEntity> orderEntity, List<Roles> rolesList) {
         this.accountName = accountName;
         this.phoneNumber = phoneNumber;
         this.email = email;
@@ -51,6 +60,7 @@ public class Accounts {
         this.password = password;
         this.token = token;
         this.product = product;
+        this.orderEntity = orderEntity;
         this.rolesList = rolesList;
     }
 
@@ -164,6 +174,14 @@ public class Accounts {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public List<OrdersEntity> getOrderEntity() {
+        return orderEntity;
+    }
+
+    public void setOrderEntity(List<OrdersEntity> orderEntity) {
+        this.orderEntity = orderEntity;
     }
 
     public List<Roles> getRolesList() {

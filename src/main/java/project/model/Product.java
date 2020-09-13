@@ -1,6 +1,8 @@
 package project.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
@@ -28,6 +30,9 @@ public class Product {
     @OneToOne()
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Accounts accounts;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "product")
+    private Set<OrderDetailEntity> orderDetailEntitySet = new HashSet<>();
 
 
     public Product() {
