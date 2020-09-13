@@ -58,7 +58,7 @@ public class AccountController {
                 HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST, path = "/register")
     public ResponseEntity<Object> create(@RequestBody Accounts accounts) {
         Accounts accountsByEmail = accountService.findByEmail(accounts.getEmail());
         if (accountsByEmail != null) {

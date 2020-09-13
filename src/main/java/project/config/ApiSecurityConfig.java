@@ -42,7 +42,7 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/accounts/login/**");
+        web.ignoring().antMatchers("/accounts/login/**", "/accounts/register/**");
     }
 
 }
