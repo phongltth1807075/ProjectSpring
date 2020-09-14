@@ -43,6 +43,8 @@ public class OrderService {
         return list;
     }
 
+
+
     public boolean delete(OrdersEntity orderEntity) {
         orderEntity.setStatus(OrdersEntity.OrderStatus.Deleted);
         orderEntity.setDeletedAt(Calendar.getInstance().getTimeInMillis());
@@ -56,24 +58,28 @@ public class OrderService {
         orderRepository.save(orderEntity);
         return true;
     }
+
     public boolean shippingOrder(OrdersEntity orderEntity) {
         orderEntity.setStatus(OrdersEntity.OrderStatus.Shipping);
         orderEntity.setUpdatedAt(Calendar.getInstance().getTimeInMillis());
         orderRepository.save(orderEntity);
         return true;
     }
+
     public boolean doneOrder(OrdersEntity orderEntity) {
         orderEntity.setStatus(OrdersEntity.OrderStatus.Done);
         orderEntity.setUpdatedAt(Calendar.getInstance().getTimeInMillis());
         orderRepository.save(orderEntity);
         return true;
     }
+
     public boolean paidOrder(OrdersEntity orderEntity) {
         orderEntity.setStatus(OrdersEntity.OrderStatus.Paid);
         orderEntity.setUpdatedAt(Calendar.getInstance().getTimeInMillis());
         orderRepository.save(orderEntity);
         return true;
     }
+
     public boolean cancelOrder(OrdersEntity orderEntity) {
         orderEntity.setStatus(OrdersEntity.OrderStatus.Cancel);
         orderEntity.setUpdatedAt(Calendar.getInstance().getTimeInMillis());
