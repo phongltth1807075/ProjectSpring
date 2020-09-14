@@ -83,7 +83,7 @@ public class ProductController {
     public ResponseEntity<Object> delete(@PathVariable int id) {
         Optional<Product> exitProduct = productService.getById(id);
         if (exitProduct.isPresent()) {
-            if (exitProduct.get().getStatus() == 1) {
+            if (exitProduct.get().getStatus() == Product.ProductStatus.Active) {
                 productService.delete(exitProduct.get());
                 return new ResponseEntity<>(new RESTResponse.Success()
                         .setStatus(HttpStatus.OK.value())
@@ -104,7 +104,7 @@ public class ProductController {
         Optional<Product> product = productService.getById(id);
         if (product.isPresent()) {
             Product product1 = product.get();
-            if (product1.getStatus() == 1) {
+            if (product1.getStatus() == Product.ProductStatus.Active) {
                 return new ResponseEntity<>(new RESTResponse.Success()
                         .setStatus(HttpStatus.OK.value())
                         .setMessage("Success")

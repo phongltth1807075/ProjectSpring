@@ -25,7 +25,7 @@ public class RoleService {
 
     public Roles create(Roles roles) {
         roles.setCreatedAt(Calendar.getInstance().getTimeInMillis());
-        roles.setStatus(1);
+        roles.setStatus(Roles.RoleStatus.Active);
         return roleRepository.save(roles);
     }
 
@@ -35,7 +35,7 @@ public class RoleService {
     }
 
     public boolean delete(Roles roles) {
-        roles.setStatus(-1);
+        roles.setStatus(Roles.RoleStatus.Deactive);
         roles.setDeletedAt(Calendar.getInstance().getTimeInMillis());
         roleRepository.save(roles);
         return true;

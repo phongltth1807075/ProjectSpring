@@ -19,13 +19,17 @@ public class Category {
     private long createdAt;
     private long updatedAt;
     private long deletedAt;
-    private int status;
+    private CategoryStatus status;
+
+    public enum CategoryStatus {
+        Active, Deactive, Deleted
+    }
 
     @JsonIgnore
     @OneToMany(mappedBy = "category")
     private List<Product> products;
 
-    public Category(String categoryName, String description, long createdAt, long updatedAt, long deletedAt, int status, List<Product> products) {
+    public Category(String categoryName, String description, long createdAt, long updatedAt, long deletedAt, CategoryStatus status, List<Product> products) {
         this.categoryName = categoryName;
         this.description = description;
         this.createdAt = createdAt;
@@ -86,11 +90,11 @@ public class Category {
         this.deletedAt = deletedAt;
     }
 
-    public int getStatus() {
+    public CategoryStatus getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(CategoryStatus status) {
         this.status = status;
     }
 

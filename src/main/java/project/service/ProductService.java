@@ -22,6 +22,7 @@ public class ProductService {
 
 
     public Product create(Product product) {
+        product.setStatus(Product.ProductStatus.Active);
         product.setCreatedAt(Calendar.getInstance().getTimeInMillis());
         return productRepository.save(product);
     }
@@ -33,7 +34,7 @@ public class ProductService {
 
 
     public boolean delete(Product product) {
-        product.setStatus(-1);
+        product.setStatus(Product.ProductStatus.Deactive);
         product.setDeletedAt(Calendar.getInstance().getTimeInMillis());
         productRepository.save(product);
         return true;

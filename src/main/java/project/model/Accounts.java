@@ -21,11 +21,18 @@ public class Accounts {
     private long createdAt;
     private long updatedAt;
     private long deletedAt;
-    private int gender;
+    private Gender gender;
     private long birthday;
-    private int status;
+    private AccountStatus status;
     private String password;
     private String token;
+
+    public enum AccountStatus {
+        Active, Deactive, Deleted
+    }
+    public enum Gender {
+        Male, Female, Other
+    }
 
     @OneToOne(mappedBy = "accounts")
     private Product product;
@@ -46,7 +53,7 @@ public class Accounts {
     public Accounts() {
     }
 
-    public Accounts(String accountName, String phoneNumber, String email, String address, long createdAt, long updatedAt, long deletedAt, int gender, long birthday, int status, String password, String token, Product product, List<OrdersEntity> orderEntity, List<Roles> rolesList) {
+    public Accounts(String accountName, String phoneNumber, String email, String address, long createdAt, long updatedAt, long deletedAt, Gender gender, long birthday, AccountStatus status, String password, String token, Product product, List<OrdersEntity> orderEntity, List<Roles> rolesList) {
         this.accountName = accountName;
         this.phoneNumber = phoneNumber;
         this.email = email;
@@ -128,11 +135,11 @@ public class Accounts {
         this.deletedAt = deletedAt;
     }
 
-    public int getGender() {
+    public Gender getGender() {
         return gender;
     }
 
-    public void setGender(int gender) {
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
 
@@ -144,11 +151,11 @@ public class Accounts {
         this.birthday = birthday;
     }
 
-    public int getStatus() {
+    public AccountStatus getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(AccountStatus status) {
         this.status = status;
     }
 

@@ -14,16 +14,15 @@ public class ProductDTO {
     private String UpdatedAt;
     private String DeletedAt;
     private String ImageProduct;
-    private int Status;
+    private Product.ProductStatus Status;
     private int AccountId;
 
     public ProductDTO() {
     }
 
-    private project.dto.CategoryDTO categoryDTO = new CategoryDTO();
 
     public ProductDTO(Product product) {
-        ObjectUtil.cloneObject(this, product);
+        project.dto.CategoryDTO categoryDTO = new CategoryDTO();
         ProductId = product.getProductId();
         AccountId = product.getAccountId();
         ProductName = product.getProductName();
@@ -117,11 +116,11 @@ public class ProductDTO {
         ImageProduct = imageProduct;
     }
 
-    public int getStatus() {
+    public Product.ProductStatus getStatus() {
         return Status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Product.ProductStatus status) {
         Status = status;
     }
 

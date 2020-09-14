@@ -30,7 +30,7 @@ public class CategoryService {
     }
 
     public boolean delete(Category category) {
-        category.setStatus(-1);
+        category.setStatus(Category.CategoryStatus.Deactive);
         category.setDeletedAt(Calendar.getInstance().getTimeInMillis());
         categoryRepository.save(category);
         return true;

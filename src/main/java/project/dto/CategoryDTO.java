@@ -1,5 +1,7 @@
 package project.dto;
 
+import project.model.Category;
+
 public class CategoryDTO {
     private int CategoryId;
     private String CategoryName;
@@ -7,9 +9,9 @@ public class CategoryDTO {
     private String CreatedAt;
     private String UpdatedAt;
     private String DeletedAt;
-    private int Status;
+    private Category.CategoryStatus Status;
 
-    public CategoryDTO(int categoryId, String categoryName, String description, String createdAt, String updatedAt, String deletedAt, int status) {
+    public CategoryDTO(int categoryId, String categoryName, String description, String createdAt, String updatedAt, String deletedAt, Category.CategoryStatus status) {
         CategoryId = categoryId;
         CategoryName = categoryName;
         Description = description;
@@ -20,6 +22,7 @@ public class CategoryDTO {
     }
 
     public CategoryDTO() {
+
     }
 
     public int getCategoryId() {
@@ -70,11 +73,11 @@ public class CategoryDTO {
         DeletedAt = deletedAt;
     }
 
-    public int getStatus() {
+    public Category.CategoryStatus getStatus() {
         return Status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Category.CategoryStatus status) {
         Status = status;
     }
 }
