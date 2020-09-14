@@ -1,8 +1,11 @@
 package project.dto;
 
+import org.springframework.context.annotation.Bean;
 import project.model.OrderDetailEntity;
+import project.util.ObjectUtil;
 
 import java.util.List;
+
 
 public class OrderDetailDTO {
     private int id;
@@ -13,16 +16,9 @@ public class OrderDetailDTO {
     private double totalPrice;
     private int quantity;
 
-    public OrderDetailDTO(List<OrderDetailEntity> list) {
-        for (int i = 0; i < list.size(); i++) {
-            this.id = list.get(i).getId();
-            this.orderId = list.get(i).getOrderId();
-            this.productId = list.get(i).getProductId();
-            this.productName = list.get(i).getProduct().getProductName();
-            this.productPrice = list.get(i).getUnitPrice();
-            this.quantity = list.get(i).getQuantity();
-            this.totalPrice = list.get(i).getUnitPrice() * list.get(i).getQuantity();
-        }
+
+    public OrderDetailDTO() {
+
     }
 
     public int getId() {

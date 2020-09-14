@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import project.dto.ListOderDetailDTO;
 import project.dto.OrderDTO;
 import project.dto.OrderDetailDTO;
 import project.model.*;
@@ -19,6 +20,7 @@ import project.model.specification.SearchCriteria;
 import project.service.OrderDetailService;
 import project.service.OrderService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,6 +34,7 @@ public class OrderEntityController {
 
     @Autowired
     OrderDetailService orderDetailService;
+
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Object> getList(
@@ -126,10 +129,23 @@ public class OrderEntityController {
     public ResponseEntity<Object> detail(@PathVariable int id) {
         List<OrderDetailEntity> list = orderService.detail(id);
         if (list != null) {
+            int size = list.size();
+            List<OrderDetailDTO> objectList = new ArrayList<>();
+            for (int i = 0; i < size; i++) {
+                OrderDetailDTO orderDetailDTO = new OrderDetailDTO();
+                orderDetailDTO.setId(list.get(i).getId());
+                orderDetailDTO.setOrderId(list.get(i).getOrderId());
+                orderDetailDTO.setProductPrice(list.get(i).getUnitPrice());
+                orderDetailDTO.setProductId(list.get(i).getProductId());
+                orderDetailDTO.setProductName(list.get(i).getProduct().getProductName());
+                orderDetailDTO.setQuantity(list.get(i).getQuantity());
+                orderDetailDTO.setTotalPrice(list.get(i).getUnitPrice() * list.get(i).getQuantity());
+                objectList.add(orderDetailDTO);
+            }
             return new ResponseEntity<>(new RESTResponse.Success()
                     .setStatus(HttpStatus.OK.value())
                     .setMessage("Simple Success")
-                    .addData(new OrderDetailDTO(list))
+                    .addData(new ListOderDetailDTO(objectList))
                     .build(),
                     HttpStatus.OK);
         }
