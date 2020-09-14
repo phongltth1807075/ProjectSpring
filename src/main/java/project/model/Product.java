@@ -18,7 +18,7 @@ public class Product {
     private long updatedAt;
     private long deletedAt;
     private String imageProduct;
-    private int status;
+    private ProductStatus status;
     @Column(name = "account_id")
     private int accountId;
 
@@ -34,11 +34,14 @@ public class Product {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "product")
     private Set<OrderDetailEntity> orderDetailEntitySet = new HashSet<>();
 
+    public enum ProductStatus {
+        Active, Deactive, Deleted
+    }
 
     public Product() {
     }
 
-    public Product(int categoryId, String productName, double productPrice, String description, long createdAt, long updatedAt, long deletedAt, String imageProduct, int status, int accountId, Category category, Accounts accounts) {
+    public Product(int categoryId, String productName, double productPrice, String description, long createdAt, long updatedAt, long deletedAt, String imageProduct, ProductStatus status, int accountId, Category category, Accounts accounts, Set<OrderDetailEntity> orderDetailEntitySet) {
         this.categoryId = categoryId;
         this.productName = productName;
         this.productPrice = productPrice;
@@ -51,6 +54,7 @@ public class Product {
         this.accountId = accountId;
         this.category = category;
         this.accounts = accounts;
+        this.orderDetailEntitySet = orderDetailEntitySet;
     }
 
     public int getProductId() {
@@ -125,12 +129,20 @@ public class Product {
         this.imageProduct = imageProduct;
     }
 
-    public int getStatus() {
+    public ProductStatus getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(ProductStatus status) {
         this.status = status;
+    }
+
+    public Set<OrderDetailEntity> getOrderDetailEntitySet() {
+        return orderDetailEntitySet;
+    }
+
+    public void setOrderDetailEntitySet(Set<OrderDetailEntity> orderDetailEntitySet) {
+        this.orderDetailEntitySet = orderDetailEntitySet;
     }
 
     public int getAccountId() {

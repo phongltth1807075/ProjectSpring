@@ -9,7 +9,7 @@ public class RoleDTO {
     private String CreatedAt;
     private String UpdatedAt;
     private String DeletedAt;
-    private int Status;
+    private Roles.RoleStatus Status;
 
     public RoleDTO() {
     }
@@ -63,11 +63,11 @@ public class RoleDTO {
         DeletedAt = deletedAt;
     }
 
-    public int getStatus() {
+    public Roles.RoleStatus getStatus() {
         return Status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Roles.RoleStatus status) {
         Status = status;
     }
 }

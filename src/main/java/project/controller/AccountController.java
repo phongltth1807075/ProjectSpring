@@ -117,7 +117,7 @@ public class AccountController {
         Optional<Accounts> accounts = accountService.getById(id);
         if (accounts.isPresent()) {
             Accounts accounts1 = accounts.get();
-            if (accounts1.getStatus() == 1) {
+            if (accounts1.getStatus() == Accounts.AccountStatus.Active) {
                 return new ResponseEntity<>(new RESTResponse.Success()
                         .setStatus(HttpStatus.OK.value())
                         .setMessage("Success")

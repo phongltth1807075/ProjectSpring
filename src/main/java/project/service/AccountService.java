@@ -31,6 +31,7 @@ public class AccountService implements UserService {
     public Accounts create(Accounts accounts) {
         String password = accounts.getPassword();
         String hash = BCrypt.hashpw(password, BCrypt.gensalt(12));
+        accounts.setStatus(Accounts.AccountStatus.Active);
         accounts.setPassword(hash);
         accounts.setCreatedAt(Calendar.getInstance().getTimeInMillis());
         return accountRepository.save(accounts);
@@ -42,7 +43,7 @@ public class AccountService implements UserService {
     }
 
     public boolean delete(Accounts accounts) {
-        accounts.setStatus(-1);
+        accounts.setStatus(Accounts.AccountStatus.Deactive);
         accounts.setDeletedAt(Calendar.getInstance().getTimeInMillis());
         accountRepository.save(accounts);
         return true;

@@ -14,7 +14,7 @@ public class Roles {
     private long createdAt;
     private long updatedAt;
     private long deletedAt;
-    private int status;
+    private RoleStatus status;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "rolesList", cascade = CascadeType.PERSIST)
@@ -23,7 +23,11 @@ public class Roles {
     public Roles() {
     }
 
-    public Roles(String roleName, long createdAt, long updatedAt, long deletedAt, int status, List<Accounts> accountsList) {
+    public enum RoleStatus {
+        Active, Deactive, Deleted
+    }
+
+    public Roles(String roleName, long createdAt, long updatedAt, long deletedAt, RoleStatus status, List<Accounts> accountsList) {
         this.roleName = roleName;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -72,11 +76,11 @@ public class Roles {
         this.deletedAt = deletedAt;
     }
 
-    public int getStatus() {
+    public RoleStatus getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(RoleStatus status) {
         this.status = status;
     }
 

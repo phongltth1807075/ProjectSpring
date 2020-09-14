@@ -16,9 +16,9 @@ public class AccountDTO {
     private String CreatedAt;
     private String UpdatedAt;
     private String DeletedAt;
-    private int Gender;
+    private Accounts.Gender Gender;
     private String Birthday;
-    private int Status;
+    private Accounts.AccountStatus Status;
     private String Password;
     private String Token;
     private List<Roles> rolesList;
@@ -108,11 +108,11 @@ public class AccountDTO {
         DeletedAt = deletedAt;
     }
 
-    public int getGender() {
+    public Accounts.Gender getGender() {
         return Gender;
     }
 
-    public void setGender(int gender) {
+    public void setGender(Accounts.Gender gender) {
         Gender = gender;
     }
 
@@ -124,11 +124,11 @@ public class AccountDTO {
         Birthday = birthday;
     }
 
-    public int getStatus() {
+    public Accounts.AccountStatus getStatus() {
         return Status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Accounts.AccountStatus status) {
         Status = status;
     }
 

@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 @RequestMapping(path = "/roles")
 public class RoleController {
 
-
     @Autowired
     RoleService roleService;
 
