@@ -21,6 +21,7 @@ public class CategoryService {
 
     public Category create(Category category) {
         category.setCreatedAt(Calendar.getInstance().getTimeInMillis());
+        category.setStatus(Category.CategoryStatus.Active);
         return categoryRepository.save(category);
     }
 

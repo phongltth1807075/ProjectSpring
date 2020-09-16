@@ -8,14 +8,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import project.dto.ImageDTO;
+import project.dto.ListImageDTO;
+import project.dto.OrderDetailDTO;
 import project.dto.ProductDTO;
+import project.model.DataProducts;
+import project.model.Image;
 import project.model.Product;
 import project.model.rest.RESTPagination;
 import project.model.rest.RESTResponse;
 import project.model.specification.ProductSpecification;
 import project.model.specification.SearchCriteria;
+import project.service.ImageService;
 import project.service.ProductService;
+import project.util.DateTimeUtil;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -25,6 +34,9 @@ public class ProductController {
 
     @Autowired
     ProductService productService;
+
+    @Autowired
+    ImageService imageService;
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Object> getList(
@@ -61,9 +73,34 @@ public class ProductController {
                 HttpStatus.OK);
     }
 
+
+    @RequestMapping(method = RequestMethod.GET, path = "/listImage/{id}")
+    public ResponseEntity<Object> listImageByProductId(@PathVariable int id) {
+        List<Image> imageList = imageService.findImageByProductId(id);
+        List<ImageDTO> imageDTOArrayList = new ArrayList<>();
+        for (int i = 0; i < imageList.size(); i++) {
+            ImageDTO imageDTO = new ImageDTO();
+            imageDTO.setId(imageList.get(i).getId());
+            imageDTO.setProductId(imageList.get(i).getProductId());
+            imageDTO.setUrl(imageList.get(i).getUrl());
+            imageDTO.setStatus(imageList.get(i).getStatus());
+            imageDTO.setCreatedAt(DateTimeUtil.formatDateFromLong(imageList.get(i).getCreatedAt()));
+            imageDTO.setUpdatedAt(DateTimeUtil.formatDateFromLong(imageList.get(i).getUpdatedAt()));
+            imageDTO.setDeletedAt(DateTimeUtil.formatDateFromLong(imageList.get(i).getDeletedAt()));
+            imageDTOArrayList.add(imageDTO);
+        }
+        return new ResponseEntity<>(new ListImageDTO(imageDTOArrayList), HttpStatus.OK);
+    }
+
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Object> create(@RequestBody Product product) {
-        Product saveProduct = productService.create(product);
+    public ResponseEntity<Object> create(@RequestBody DataProducts dataProducts) {
+        Product saveProduct = productService.create(dataProducts.getProduct());
+        for (int i = 0; i < dataProducts.getImageList().size(); i++) {
+            Image save = new Image();
+            save.setProductId(dataProducts.getProduct().getProductId());
+            save.setUrl(dataProducts.getImageList().get(i).getUrl());
+            imageService.create(save);
+        }
         if (saveProduct != null) {
             return new ResponseEntity<>(new RESTResponse.Success()
                     .setStatus(HttpStatus.CREATED.value())
@@ -128,17 +165,26 @@ public class ProductController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/{id}")
-    public ResponseEntity<Object> update(@PathVariable int id, @RequestBody Product product) {
+    public ResponseEntity<Object> update(@PathVariable int id, @RequestBody DataProducts dataProducts) {
         Optional<Product> productUpdate = productService.getById(id);
         if (productUpdate.isPresent()) {
             Product newProduct = productUpdate.get();
-            newProduct.setProductName(product.getProductName());
-            newProduct.setDescription(product.getDescription());
-            newProduct.setImageProduct(product.getImageProduct());
-            newProduct.setProductPrice(product.getProductPrice());
-            newProduct.setStatus(product.getStatus());
-            newProduct.setCategoryId(product.getCategoryId());
+            newProduct.setProductName(dataProducts.getProduct().getProductName());
+            newProduct.setDescription(dataProducts.getProduct().getDescription());
+            newProduct.setImageProduct(dataProducts.getProduct().getImageProduct());
+            newProduct.setProductPrice(dataProducts.getProduct().getProductPrice());
+            newProduct.setStatus(dataProducts.getProduct().getStatus());
+            newProduct.setCategoryId(dataProducts.getProduct().getCategoryId());
             Product productupdate = productService.update(newProduct);
+            if (dataProducts.getImageList() != null) {
+                imageService.hard_erase(id);
+                for (int i = 0; i < dataProducts.getImageList().size(); i++) {
+                    Image save = new Image();
+                    save.setProductId(id);
+                    save.setUrl(dataProducts.getImageList().get(i).getUrl());
+                    imageService.create(save);
+                }
+            }
             return new ResponseEntity<>(new RESTResponse.Success()
                     .setStatus(HttpStatus.OK.value())
                     .setMessage("Success")

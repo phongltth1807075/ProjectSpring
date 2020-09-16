@@ -14,11 +14,20 @@ public class OrderDetailDTO {
     private String productName;
     private double productPrice;
     private double totalPrice;
+    private String property;
     private int quantity;
 
 
     public OrderDetailDTO() {
 
+    }
+
+    public String getProperty() {
+        return property;
+    }
+
+    public void setProperty(String property) {
+        this.property = property;
     }
 
     public int getId() {

@@ -48,6 +48,7 @@ public class AccountController {
         if (gender.isPresent()) {
             specification = specification.and(new AccountSpecification(new SearchCriteria("gender", "=", gender.get())));
         }
+        specification = specification.and(new AccountSpecification(new SearchCriteria("status", "=", Accounts.AccountStatus.Active)));
         Page<Accounts> AccountPage = accountService.getList(specification, page, limit);
         return new ResponseEntity<>(new RESTResponse.Success()
                 .setStatus(HttpStatus.OK.value())

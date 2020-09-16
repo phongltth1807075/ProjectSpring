@@ -1,8 +1,11 @@
 package project.dto;
 
+import project.model.Image;
 import project.model.Product;
 import project.util.DateTimeUtil;
 import project.util.ObjectUtil;
+
+import java.util.List;
 
 public class ProductDTO {
     private int ProductId;
