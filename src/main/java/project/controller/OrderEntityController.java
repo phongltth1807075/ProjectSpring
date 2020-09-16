@@ -74,10 +74,6 @@ public class OrderEntityController {
     public ResponseEntity<Object> create(@RequestBody ShoppingCart shoppingCart) {
         if (shoppingCart.getCartInformation().getPaymentType().equals(OrdersEntity.PaymentType.Cod)) {
 
-            for (int i = 0; i < shoppingCart.getList().size(); i++) {
-
-            }
-
             OrdersEntity createOrder = new OrdersEntity();
             createOrder.setAccountId(shoppingCart.getCartInformation().getAccountId());
             createOrder.setStatus(OrdersEntity.OrderStatus.Pending);

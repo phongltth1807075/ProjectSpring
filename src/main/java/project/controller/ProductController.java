@@ -12,11 +12,13 @@ import project.dto.ImageDTO;
 import project.dto.ListImageDTO;
 import project.dto.OrderDetailDTO;
 import project.dto.ProductDTO;
+import project.model.Accounts;
 import project.model.DataProducts;
 import project.model.Image;
 import project.model.Product;
 import project.model.rest.RESTPagination;
 import project.model.rest.RESTResponse;
+import project.model.specification.AccountSpecification;
 import project.model.specification.ProductSpecification;
 import project.model.specification.SearchCriteria;
 import project.service.ImageService;
@@ -63,6 +65,7 @@ public class ProductController {
         if (category.isPresent()) {
             specification = specification.and(new ProductSpecification(new SearchCriteria("categoryId", "=", category.get())));
         }
+        specification = specification.and(new AccountSpecification(new SearchCriteria("status", "=", Product.ProductStatus.Active)));
         Page<Product> ProductPage = productService.getList(specification, page, limit);
         return new ResponseEntity<>(new RESTResponse.Success()
                 .setStatus(HttpStatus.OK.value())
@@ -95,11 +98,13 @@ public class ProductController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Object> create(@RequestBody DataProducts dataProducts) {
         Product saveProduct = productService.create(dataProducts.getProduct());
-        for (int i = 0; i < dataProducts.getImageList().size(); i++) {
-            Image save = new Image();
-            save.setProductId(dataProducts.getProduct().getProductId());
-            save.setUrl(dataProducts.getImageList().get(i).getUrl());
-            imageService.create(save);
+        if (dataProducts.getImageList()!=null){
+            for (int i = 0; i < dataProducts.getImageList().size(); i++) {
+                Image save = new Image();
+                save.setProductId(saveProduct.getProductId());
+                save.setUrl(dataProducts.getImageList().get(i).getUrl());
+                imageService.create(save);
+            }
         }
         if (saveProduct != null) {
             return new ResponseEntity<>(new RESTResponse.Success()

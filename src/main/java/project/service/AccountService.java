@@ -37,9 +37,9 @@ public class AccountService implements UserService {
         return accountRepository.save(accounts);
     }
 
-    public Optional<Accounts> getById(int id) {
-        Optional<Accounts> optionalProduct = accountRepository.findById(id);
-        return optionalProduct;
+    public Accounts getById(int id) {
+        Accounts accounts = accountRepository.findByAccountId(id);
+        return accounts;
     }
 
     public boolean delete(Accounts accounts) {

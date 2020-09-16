@@ -27,7 +27,6 @@ public class AccountDTO {
     }
 
     public AccountDTO(Accounts accounts) {
-        ObjectUtil.cloneObject(this, accounts);
         AccountId = accounts.getAccountId();
         AccountName = accounts.getAccountName();
         PhoneNumber = accounts.getPhoneNumber();
@@ -43,6 +42,7 @@ public class AccountDTO {
         Token = accounts.getToken();
         rolesList = accounts.getRolesList();
     }
+
 
     public int getAccountId() {
         return AccountId;
