@@ -26,7 +26,7 @@ public class Product {
     @JoinColumn(name = "CategoryId", insertable = false, updatable = false)
     private Category category;
 
-    @OneToMany(mappedBy = "products", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "products", fetch = FetchType.LAZY)
     private Set<Image> images = new HashSet<>();
 
     @OneToOne()

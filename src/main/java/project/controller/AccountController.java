@@ -89,10 +89,9 @@ public class AccountController {
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
     public ResponseEntity<Object> delete(@PathVariable int id) {
-        Optional<Accounts> exitAccount = accountService.getById(id);
-        if (exitAccount.isPresent()) {
-            Accounts accounts = exitAccount.get();
-            accountService.delete(accounts);
+        Accounts exitAccount = accountService.getById(id);
+        if (exitAccount != null) {
+            accountService.delete(exitAccount);
             return new ResponseEntity<>(new RESTResponse.Success()
                     .setStatus(HttpStatus.OK.value())
                     .setMessage("Simple Success")
@@ -108,21 +107,27 @@ public class AccountController {
 
 
     @RequestMapping(method = RequestMethod.POST, path = "/login")
-    public ResponseEntity<Accounts> login(@RequestParam("email") String email, @RequestParam("password") String password) {
+    public ResponseEntity<Object> login(@RequestParam("email") String email, @RequestParam("password") String password) {
         Accounts accounts = accountService.login(email, password);
-        return new ResponseEntity<>(accounts, HttpStatus.OK);
+        if (accounts.getStatus() != Accounts.AccountStatus.Active) {
+            return new ResponseEntity<>(new RESTResponse.SimpleError()
+                    .setCode(HttpStatus.NOT_FOUND.value())
+                    .setMessage("Not found")
+                    .build(),
+                    HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(new AccountDTO(accounts), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{id}")
     public ResponseEntity<Object> getDetail(@PathVariable int id) {
-        Optional<Accounts> accounts = accountService.getById(id);
-        if (accounts.isPresent()) {
-            Accounts accounts1 = accounts.get();
-            if (accounts1.getStatus() == Accounts.AccountStatus.Active) {
+        Accounts accounts = accountService.getById(id);
+        if (accounts != null) {
+            if (accounts.getStatus() == Accounts.AccountStatus.Active) {
                 return new ResponseEntity<>(new RESTResponse.Success()
                         .setStatus(HttpStatus.OK.value())
                         .setMessage("Success")
-                        .addData(new AccountDTO(accounts1))
+                        .addData(new AccountDTO(accounts))
                         .build(),
                         HttpStatus.OK);
             } else {
@@ -132,7 +137,6 @@ public class AccountController {
                         .build(),
                         HttpStatus.NOT_FOUND);
             }
-
         } else {
             return new ResponseEntity<>(new RESTResponse.SimpleError()
                     .setCode(HttpStatus.NOT_FOUND.value())
@@ -144,9 +148,8 @@ public class AccountController {
 
     @RequestMapping(method = RequestMethod.PUT, path = "/{id}")
     public ResponseEntity<Object> update(@PathVariable int id, @RequestBody Accounts accounts) {
-        Optional<Accounts> accountsUpdate = accountService.getById(id);
-        if (accountsUpdate.isPresent()) {
-            Accounts newAccount = accountsUpdate.get();
+        Accounts newAccount = accountService.getById(id);
+        if (newAccount != null) {
             newAccount.setAccountName(accounts.getAccountName());
             newAccount.setAddress(accounts.getAddress());
             newAccount.setBirthday(accounts.getBirthday());
