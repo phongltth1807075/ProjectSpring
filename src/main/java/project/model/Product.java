@@ -26,6 +26,8 @@ public class Product {
     @JoinColumn(name = "CategoryId", insertable = false, updatable = false)
     private Category category;
 
+    @OneToMany(mappedBy = "products", fetch = FetchType.EAGER)
+    private Set<Image> images = new HashSet<>();
 
     @OneToOne()
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
@@ -41,7 +43,8 @@ public class Product {
     public Product() {
     }
 
-    public Product(int categoryId, String productName, double productPrice, String description, long createdAt, long updatedAt, long deletedAt, String imageProduct, ProductStatus status, int accountId, Category category, Accounts accounts, Set<OrderDetailEntity> orderDetailEntitySet) {
+    public Product(int productId, int categoryId, String productName, double productPrice, String description, long createdAt, long updatedAt, long deletedAt, String imageProduct, ProductStatus status, int accountId, Category category, Set<Image> images, Accounts accounts, Set<OrderDetailEntity> orderDetailEntitySet) {
+        this.productId = productId;
         this.categoryId = categoryId;
         this.productName = productName;
         this.productPrice = productPrice;
@@ -53,6 +56,7 @@ public class Product {
         this.status = status;
         this.accountId = accountId;
         this.category = category;
+        this.images = images;
         this.accounts = accounts;
         this.orderDetailEntitySet = orderDetailEntitySet;
     }
@@ -167,5 +171,13 @@ public class Product {
 
     public void setAccounts(Accounts accounts) {
         this.accounts = accounts;
+    }
+
+    public Set<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(Set<Image> images) {
+        this.images = images;
     }
 }

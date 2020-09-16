@@ -73,6 +73,11 @@ public class OrderEntityController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Object> create(@RequestBody ShoppingCart shoppingCart) {
         if (shoppingCart.getCartInformation().getPaymentType().equals(OrdersEntity.PaymentType.Cod)) {
+
+            for (int i = 0; i < shoppingCart.getList().size(); i++) {
+
+            }
+
             OrdersEntity createOrder = new OrdersEntity();
             createOrder.setAccountId(shoppingCart.getCartInformation().getAccountId());
             createOrder.setStatus(OrdersEntity.OrderStatus.Pending);
@@ -97,6 +102,7 @@ public class OrderEntityController {
                 createOrderDetail.setProductId(shoppingCart.getList().get(i).getProductId());
                 createOrderDetail.setUnitPrice(shoppingCart.getList().get(i).getPrice());
                 createOrderDetail.setQuantity(shoppingCart.getList().get(i).getQuantity());
+                createOrderDetail.setProperty(shoppingCart.getList().get(i).getProperty());
                 orderDetailService.create(createOrderDetail);
             }
             return new ResponseEntity<>(new RESTResponse.Success()
@@ -139,6 +145,7 @@ public class OrderEntityController {
                 orderDetailDTO.setProductId(list.get(i).getProductId());
                 orderDetailDTO.setProductName(list.get(i).getProduct().getProductName());
                 orderDetailDTO.setQuantity(list.get(i).getQuantity());
+                orderDetailDTO.setProperty(list.get(i).getProperty());
                 orderDetailDTO.setTotalPrice(list.get(i).getUnitPrice() * list.get(i).getQuantity());
                 objectList.add(orderDetailDTO);
             }
