@@ -12,10 +12,7 @@ import project.dto.ImageDTO;
 import project.dto.ListImageDTO;
 import project.dto.OrderDetailDTO;
 import project.dto.ProductDTO;
-import project.model.Accounts;
-import project.model.DataProducts;
-import project.model.Image;
-import project.model.Product;
+import project.model.*;
 import project.model.rest.RESTPagination;
 import project.model.rest.RESTResponse;
 import project.model.specification.AccountSpecification;
@@ -23,6 +20,7 @@ import project.model.specification.ProductSpecification;
 import project.model.specification.SearchCriteria;
 import project.service.ImageService;
 import project.service.ProductService;
+import project.service.WarehouseService;
 import project.util.DateTimeUtil;
 
 import java.util.ArrayList;
@@ -39,6 +37,9 @@ public class ProductController {
 
     @Autowired
     ImageService imageService;
+
+    @Autowired
+    WarehouseService warehouseService;
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Object> getList(
@@ -98,7 +99,12 @@ public class ProductController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Object> create(@RequestBody DataProducts dataProducts) {
         Product saveProduct = productService.create(dataProducts.getProduct());
-        if (dataProducts.getImageList()!=null){
+        Warehouse warehouse = new Warehouse();
+        warehouse.setProductId(saveProduct.getProductId());
+        warehouse.setProductName(saveProduct.getProductName());
+        warehouse.setTotalProduct(dataProducts.getTotalProducts());
+        warehouseService.create(warehouse);
+        if (dataProducts.getImageList() != null) {
             for (int i = 0; i < dataProducts.getImageList().size(); i++) {
                 Image save = new Image();
                 save.setProductId(saveProduct.getProductId());

@@ -26,6 +26,9 @@ public class Product {
     @JoinColumn(name = "CategoryId", insertable = false, updatable = false)
     private Category category;
 
+    @OneToOne(mappedBy = "product")
+    private Warehouse warehouse;
+
     @OneToMany(mappedBy = "products", fetch = FetchType.LAZY)
     private Set<Image> images = new HashSet<>();
 
@@ -43,7 +46,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(int productId, int categoryId, String productName, double productPrice, String description, long createdAt, long updatedAt, long deletedAt, String imageProduct, ProductStatus status, int accountId, Category category, Set<Image> images, Accounts accounts, Set<OrderDetailEntity> orderDetailEntitySet) {
+    public Product(int productId, int categoryId, String productName, double productPrice, String description, long createdAt, long updatedAt, long deletedAt, String imageProduct, ProductStatus status, int accountId, Category category, Warehouse warehouse, Set<Image> images, Accounts accounts, Set<OrderDetailEntity> orderDetailEntitySet) {
         this.productId = productId;
         this.categoryId = categoryId;
         this.productName = productName;
@@ -56,6 +59,7 @@ public class Product {
         this.status = status;
         this.accountId = accountId;
         this.category = category;
+        this.warehouse = warehouse;
         this.images = images;
         this.accounts = accounts;
         this.orderDetailEntitySet = orderDetailEntitySet;
@@ -148,6 +152,15 @@ public class Product {
     public void setOrderDetailEntitySet(Set<OrderDetailEntity> orderDetailEntitySet) {
         this.orderDetailEntitySet = orderDetailEntitySet;
     }
+
+    public Warehouse getWarehouse() {
+        return warehouse;
+    }
+
+    public void setWarehouse(Warehouse warehouse) {
+        this.warehouse = warehouse;
+    }
+
 
     public int getAccountId() {
         return accountId;

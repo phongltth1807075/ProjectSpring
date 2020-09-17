@@ -19,6 +19,7 @@ import project.model.specification.OrderSpecfication;
 import project.model.specification.SearchCriteria;
 import project.service.OrderDetailService;
 import project.service.OrderService;
+import project.service.WarehouseService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,9 @@ public class OrderEntityController {
 
     @Autowired
     OrderDetailService orderDetailService;
+
+    @Autowired
+    WarehouseService warehouseService;
 
 
     @RequestMapping(method = RequestMethod.GET)
@@ -71,61 +75,87 @@ public class OrderEntityController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
+
     public ResponseEntity<Object> create(@RequestBody ShoppingCart shoppingCart) {
-        if (shoppingCart.getCartInformation().getPaymentType().equals(OrdersEntity.PaymentType.Cod)) {
-
-            OrdersEntity createOrder = new OrdersEntity();
-            createOrder.setAccountId(shoppingCart.getCartInformation().getAccountId());
-            createOrder.setStatus(OrdersEntity.OrderStatus.Pending);
-            createOrder.setPaymentType(OrdersEntity.PaymentType.Cod);
-            createOrder.setShipAddress(shoppingCart.getCartInformation().getShipAddress());
-            createOrder.setShipPhone(shoppingCart.getCartInformation().getShipPhone());
-            createOrder.setAccountId(shoppingCart.getCartInformation().getAccountId());
-            createOrder.setTransportersId(shoppingCart.getCartInformation().getTransportersId());
-            //total price order
-            double totalPrice = 0.0;
-
-            int size = shoppingCart.getList().size();
-
-            for (int i = 0; i < shoppingCart.getList().size(); i++) {
-                totalPrice += shoppingCart.getList().get(i).getQuantity() * shoppingCart.getList().get(i).getPrice();
-
-            }
-            createOrder.setTotalPrice(totalPrice);
-            orderService.create(createOrder);
-            for (int i = 0; i < size; i++) {
-                OrderDetailEntity createOrderDetail = new OrderDetailEntity();
-                createOrderDetail.setOrderId(createOrder.getId());
-                createOrderDetail.setProductId(shoppingCart.getList().get(i).getProductId());
-                createOrderDetail.setUnitPrice(shoppingCart.getList().get(i).getPrice());
-                createOrderDetail.setQuantity(shoppingCart.getList().get(i).getQuantity());
-                createOrderDetail.setProperty(shoppingCart.getList().get(i).getProperty());
-                orderDetailService.create(createOrderDetail);
-            }
-            return new ResponseEntity<>(new RESTResponse.Success()
-                    .setStatus(HttpStatus.CREATED.value())
-                    .setMessage("Action Success")
-                    .addData(createOrder)
-                    .build(),
-                    HttpStatus.CREATED);
+        List<Integer> id = new ArrayList<>();
+        List<Double> total = new ArrayList<>();
+        List<Double> w = new ArrayList<>();
+        List<Warehouse> warehouseList = new ArrayList<>();
+        List<Double> min = new ArrayList<>();
+        for (int i = 0; i < shoppingCart.getList().size(); i++) {
+            id.add(shoppingCart.getList().get(i).getProductId());
         }
-        /// Thanh toan vnPay or InterNetBanking
-        ///
-        ///
-        ///
-//        else if (cartInformation.getPaymentType().equals("VnPay")) {
-//            /// Thanh toan vnPay or InterNetBanking
-//            ///
-//            ///
-//            ///
-//        }
-        else {
+        List<Integer> quantity = new ArrayList<>();
+        for (int i = 0; i < shoppingCart.getList().size(); i++) {
+            quantity.add(shoppingCart.getList().get(i).getQuantity());
+        }
+        for (int i = 0; i < id.size(); i++) {
+            Warehouse warehouse = warehouseService.getById(id.get(i));
+            total.add(warehouse.getTotalProduct());
+            w.add(total.get(i) - quantity.get(i));
+        }
+        for (int i = 0; i < w.size(); i++) {
+            if (w.get(i) < 0) {
+                min.add(w.get(i));
+            }
+        }
+        if (min.size() <= 0) {
+            if (shoppingCart.getCartInformation().getPaymentType().equals(OrdersEntity.PaymentType.Cod)) {
+                OrdersEntity createOrder = new OrdersEntity();
+                createOrder.setAccountId(shoppingCart.getCartInformation().getAccountId());
+                createOrder.setStatus(OrdersEntity.OrderStatus.Pending);
+                createOrder.setPaymentType(OrdersEntity.PaymentType.Cod);
+                createOrder.setShipAddress(shoppingCart.getCartInformation().getShipAddress());
+                createOrder.setShipPhone(shoppingCart.getCartInformation().getShipPhone());
+                createOrder.setAccountId(shoppingCart.getCartInformation().getAccountId());
+                createOrder.setTransportersId(shoppingCart.getCartInformation().getTransportersId());
+                //total price order
+                double totalPrice = 0.0;
+
+                int size = shoppingCart.getList().size();
+
+                for (int j = 0; j < shoppingCart.getList().size(); j++) {
+                    totalPrice += shoppingCart.getList().get(j).getQuantity() * shoppingCart.getList().get(j).getPrice();
+
+                }
+                createOrder.setTotalPrice(totalPrice);
+                orderService.create(createOrder);
+                for (int z = 0; z < size; z++) {
+                    OrderDetailEntity createOrderDetail = new OrderDetailEntity();
+                    createOrderDetail.setOrderId(createOrder.getId());
+                    createOrderDetail.setProductId(shoppingCart.getList().get(z).getProductId());
+                    createOrderDetail.setUnitPrice(shoppingCart.getList().get(z).getPrice());
+                    createOrderDetail.setQuantity(shoppingCart.getList().get(z).getQuantity());
+                    createOrderDetail.setProperty(shoppingCart.getList().get(z).getProperty());
+                    orderDetailService.create(createOrderDetail);
+                }
+                for (int h = 0; h < shoppingCart.getList().size(); h++) {
+                    warehouseList.add(warehouseService.getById(shoppingCart.getList().get(h).getProductId()));
+                }
+                for (int b = 0; b < warehouseList.size(); b++) {
+                    Warehouse warehouse = warehouseList.get(b);
+                    warehouse.setTotalProduct(w.get(b));
+                    warehouseService.update(warehouse);
+                }
+                return new ResponseEntity<>(new RESTResponse.Success()
+                        .setStatus(HttpStatus.CREATED.value())
+                        .setMessage("Action Success")
+                        .addData(createOrder)
+                        .build(),
+                        HttpStatus.CREATED);
+            }
+        } else {
             return new ResponseEntity<>(new RESTResponse.SimpleError()
                     .setCode(HttpStatus.NOT_FOUND.value())
-                    .setMessage("Not found")
+                    .setMessage("There are products with excess quantity in stock")
                     .build(),
                     HttpStatus.NOT_FOUND);
         }
+        return new ResponseEntity<>(new RESTResponse.SimpleError()
+                .setCode(HttpStatus.NOT_FOUND.value())
+                .setMessage("Not found")
+                .build(),
+                HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{id}")
