@@ -5,13 +5,23 @@ import java.util.List;
 public class DataProducts {
     private Product product;
     private List<Image> imageList;
+    private double totalProducts;
 
-    public DataProducts(Product product, List<Image> imageList) {
+    public DataProducts(Product product, List<Image> imageList, double totalProducts) {
         this.product = product;
         this.imageList = imageList;
+        this.totalProducts = totalProducts;
     }
 
     public DataProducts() {
+    }
+
+    public double getTotalProducts() {
+        return totalProducts;
+    }
+
+    public void setTotalProducts(double totalProducts) {
+        this.totalProducts = totalProducts;
     }
 
     public Product getProduct() {
