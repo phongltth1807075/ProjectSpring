@@ -26,15 +26,15 @@ public class RatingController {
     RatingService ratingService;
 
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Object> getList() {
-        return new ResponseEntity<>(new RESTResponse.Success()
-                .setStatus(HttpStatus.OK.value())
-                .setMessage("Action success!")
-                .addData(ratingService.getList())
-                .build(),
-                HttpStatus.OK);
-    }
+//    @RequestMapping(method = RequestMethod.GET)
+//    public ResponseEntity<Object> getList() {
+//        return new ResponseEntity<>(new RESTResponse.Success()
+//                .setStatus(HttpStatus.OK.value())
+//                .setMessage("Action success!")
+//                .addData(ratingService.getList())
+//                .build(),
+//                HttpStatus.OK);
+//    }
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Object> create(@RequestBody Rating rating) {
@@ -73,7 +73,7 @@ public class RatingController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{id}")
-    public ResponseEntity<Object> listCommentByProductId(@PathVariable int id) {
+    public ResponseEntity<Object> listRatingByProductId(@PathVariable int id) {
         List<Rating> list = ratingService.getById(id);
         List<RatingDTO> ratingDTOList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
@@ -93,6 +93,18 @@ public class RatingController {
                 .setMessage("Not found")
                 .build(),
                 HttpStatus.NOT_FOUND);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/averageRatingOf1Product/{id}")
+    public ResponseEntity<Integer> averageRatingOf1Product(@PathVariable int id) {
+        List<Rating> ratingList = ratingService.getById(id);
+        int count = ratingList.size();
+        int sum = 0;
+        for (int i = 0; i < count; i++) {
+            sum += ratingList.get(i).getValue();
+        }
+        int average = sum / count;
+        return new ResponseEntity<>(average, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/{id}")

@@ -17,8 +17,8 @@ public class CommentService {
     CommentRepository commentRepository;
 
 
-    public List<Comment> getList() {
-        return commentRepository.findAll();
+    public List<Comment> getListByAccountId(int id) {
+        return commentRepository.findAllByAccountId(id);
     }
 
     public Comment create(Comment comment) {

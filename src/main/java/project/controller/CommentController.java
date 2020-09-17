@@ -22,18 +22,33 @@ import java.util.List;
 @Controller
 public class CommentController {
 
+
     @Autowired
     CommentService commentService;
 
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Object> getList() {
-        return new ResponseEntity<>(new RESTResponse.Success()
-                .setStatus(HttpStatus.OK.value())
-                .setMessage("Action success!")
-                .addData(commentService.getList())
+    @RequestMapping(method = RequestMethod.GET, path = "/getCommentByAccountId/{id}")
+    public ResponseEntity<Object> getList(@PathVariable int id) {
+        List<Comment> commentList = commentService.getListByAccountId(id);
+        if (commentList != null) {
+            List<CommentDTO> commentDTOList = new ArrayList<>();
+            for (int i = 0; i < commentList.size(); i++) {
+                CommentDTO commentDTO = new CommentDTO(commentList.get(i));
+                commentDTOList.add(commentDTO);
+            }
+            return new ResponseEntity<>(new RESTResponse.Success()
+                    .setStatus(HttpStatus.OK.value())
+                    .setMessage("Action success!")
+                    .addData(commentDTOList)
+                    .build(),
+                    HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new RESTResponse.SimpleError()
+                .setCode(HttpStatus.NOT_FOUND.value())
+                .setMessage("Not found")
                 .build(),
-                HttpStatus.OK);
+                HttpStatus.NOT_FOUND);
+
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -72,7 +87,7 @@ public class CommentController {
                 HttpStatus.NOT_FOUND);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE,path = "/activeComment/{id}")
+    @RequestMapping(method = RequestMethod.DELETE, path = "/activeComment/{id}")
     public ResponseEntity<Object> activeComment(@PathVariable int id) {
         Comment comment = commentService.detail(id);
         if (comment != null) {
@@ -119,29 +134,28 @@ public class CommentController {
                 HttpStatus.NOT_FOUND);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, path = "/{id}")
-    public ResponseEntity<Object> update(@PathVariable int id, @RequestBody Comment comment) {
-        Comment comment1 = commentService.detail(id);
-        if (comment1 != null) {
-            Comment newComment = comment1;
-            newComment.setAccountId(comment.getAccountId());
-            newComment.setComment(comment.getComment());
-            newComment.setProductId(comment.getProductId());
-            newComment.setStatus(comment.getStatus());
-            commentService.update(newComment);
-            return new ResponseEntity<>(new RESTResponse.Success()
-                    .setStatus(HttpStatus.OK.value())
-                    .setMessage("Success")
-                    .addData(commentService.update(newComment))
-                    .build(),
-                    HttpStatus.OK);
-        }
-        return new ResponseEntity<>(new RESTResponse.SimpleError()
-                .setCode(HttpStatus.NOT_FOUND.value())
-                .setMessage("Not found")
-                .build(),
-                HttpStatus.NOT_FOUND);
-    }
-
+//    @RequestMapping(method = RequestMethod.PUT, path = "/{id}")
+//    public ResponseEntity<Object> update(@PathVariable int id, @RequestBody Comment comment) {
+//        Comment comment1 = commentService.detail(id);
+//        if (comment1 != null) {
+//            Comment newComment = comment1;
+//            newComment.setAccountId(comment.getAccountId());
+//            newComment.setComment(comment.getComment());
+//            newComment.setProductId(comment.getProductId());
+//            newComment.setStatus(comment.getStatus());
+//            commentService.update(newComment);
+//            return new ResponseEntity<>(new RESTResponse.Success()
+//                    .setStatus(HttpStatus.OK.value())
+//                    .setMessage("Success")
+//                    .addData(commentService.update(newComment))
+//                    .build(),
+//                    HttpStatus.OK);
+//        }
+//        return new ResponseEntity<>(new RESTResponse.SimpleError()
+//                .setCode(HttpStatus.NOT_FOUND.value())
+//                .setMessage("Not found")
+//                .build(),
+//                HttpStatus.NOT_FOUND);
+//    }
 
 }
