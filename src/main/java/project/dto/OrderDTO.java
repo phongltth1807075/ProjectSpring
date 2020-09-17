@@ -16,6 +16,7 @@ public class OrderDTO {
     private OrdersEntity.OrderStatus status;
     private String shipAddress;
     private String shipPhone;
+    private String transportersName;
     private OrdersEntity.PaymentType paymentType;
 
 
@@ -32,9 +33,18 @@ public class OrderDTO {
         this.shipPhone = orderEntity.getShipPhone();
         this.paymentType = orderEntity.getPaymentType();
         this.accountName = orderEntity.getAccounts().getAccountName();
+        this.transportersName = orderEntity.getTransporters().getTransportersName();
     }
 
     public OrderDTO() {
+    }
+
+    public String getTransportersName() {
+        return transportersName;
+    }
+
+    public void setTransportersName(String transportersName) {
+        this.transportersName = transportersName;
     }
 
     public String getAccountName() {

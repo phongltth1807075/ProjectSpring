@@ -81,6 +81,7 @@ public class OrderEntityController {
             createOrder.setShipAddress(shoppingCart.getCartInformation().getShipAddress());
             createOrder.setShipPhone(shoppingCart.getCartInformation().getShipPhone());
             createOrder.setAccountId(shoppingCart.getCartInformation().getAccountId());
+            createOrder.setTransportersId(shoppingCart.getCartInformation().getTransportersId());
             //total price order
             double totalPrice = 0.0;
 
