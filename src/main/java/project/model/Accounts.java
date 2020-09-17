@@ -37,6 +37,12 @@ public class Accounts {
     @OneToOne(mappedBy = "accounts")
     private Product product;
 
+    @OneToOne(mappedBy = "account")
+    private Comment comment;
+
+    @OneToOne(mappedBy = "account")
+    private Rating rating;
+
     @JsonIgnore
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "accounts")
@@ -53,7 +59,8 @@ public class Accounts {
     public Accounts() {
     }
 
-    public Accounts(String accountName, String phoneNumber, String email, String address, long createdAt, long updatedAt, long deletedAt, Gender gender, long birthday, AccountStatus status, String password, String token, Product product, List<OrdersEntity> orderEntity, List<Roles> rolesList) {
+    public Accounts(int accountId, String accountName, String phoneNumber, String email, String address, long createdAt, long updatedAt, long deletedAt, Gender gender, long birthday, AccountStatus status, String password, String token, Product product, Comment comment, Rating rating, List<OrdersEntity> orderEntity, List<Roles> rolesList) {
+        this.accountId = accountId;
         this.accountName = accountName;
         this.phoneNumber = phoneNumber;
         this.email = email;
@@ -67,8 +74,26 @@ public class Accounts {
         this.password = password;
         this.token = token;
         this.product = product;
+        this.comment = comment;
+        this.rating = rating;
         this.orderEntity = orderEntity;
         this.rolesList = rolesList;
+    }
+
+    public Comment getComment() {
+        return comment;
+    }
+
+    public void setComment(Comment comment) {
+        this.comment = comment;
+    }
+
+    public Rating getRating() {
+        return rating;
+    }
+
+    public void setRating(Rating rating) {
+        this.rating = rating;
     }
 
     public int getAccountId() {
