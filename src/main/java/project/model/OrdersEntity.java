@@ -18,11 +18,16 @@ public class OrdersEntity {
     private OrderStatus status;
     private String shipAddress;
     private String shipPhone;
+    private int transportersId;
     private PaymentType paymentType;
 
     public enum OrderStatus {
         Pending, Condirmed, Shipping, Paid, Done, Cancel, Deleted
     }
+
+    @OneToOne()
+    @JoinColumn(name = "transportersId", insertable = false, updatable = false)
+    private Transporters transporters;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "order")
     private Set<OrderDetailEntity> orderDetailEntitySet = new HashSet<>();
@@ -40,7 +45,8 @@ public class OrdersEntity {
     }
 
 
-    public OrdersEntity(int accountId, long createdAt, long updatedAt, long deletedAt, double totalPrice, OrderStatus status, String shipAddress, String shipPhone, PaymentType paymentType, Set<OrderDetailEntity> orderDetailEntitySet, Accounts accounts) {
+    public OrdersEntity(int id, int accountId, long createdAt, long updatedAt, long deletedAt, double totalPrice, OrderStatus status, String shipAddress, String shipPhone, int transportersId, PaymentType paymentType, Transporters transporters, Set<OrderDetailEntity> orderDetailEntitySet, Accounts accounts) {
+        this.id = id;
         this.accountId = accountId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -49,7 +55,9 @@ public class OrdersEntity {
         this.status = status;
         this.shipAddress = shipAddress;
         this.shipPhone = shipPhone;
+        this.transportersId = transportersId;
         this.paymentType = paymentType;
+        this.transporters = transporters;
         this.orderDetailEntitySet = orderDetailEntitySet;
         this.accounts = accounts;
     }
@@ -149,5 +157,21 @@ public class OrdersEntity {
 
     public void setPaymentType(PaymentType paymentType) {
         this.paymentType = paymentType;
+    }
+
+    public Transporters getTransporters() {
+        return transporters;
+    }
+
+    public void setTransporters(Transporters transporters) {
+        this.transporters = transporters;
+    }
+
+    public int getTransportersId() {
+        return transportersId;
+    }
+
+    public void setTransportersId(int transportersId) {
+        this.transportersId = transportersId;
     }
 }

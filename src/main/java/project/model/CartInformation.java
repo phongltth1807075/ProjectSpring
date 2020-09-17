@@ -4,12 +4,14 @@ public class CartInformation {
     private int accountId;
     private String shipAddress;
     private String shipPhone;
+    private int transportersId;
     private OrdersEntity.PaymentType paymentType;
 
-    public CartInformation(int accountId, String shipAddress, String shipPhone, OrdersEntity.PaymentType paymentType) {
+    public CartInformation(int accountId, String shipAddress, String shipPhone, int transportersId, OrdersEntity.PaymentType paymentType) {
         this.accountId = accountId;
         this.shipAddress = shipAddress;
         this.shipPhone = shipPhone;
+        this.transportersId = transportersId;
         this.paymentType = paymentType;
     }
 
@@ -46,5 +48,13 @@ public class CartInformation {
 
     public void setPaymentType(OrdersEntity.PaymentType paymentType) {
         this.paymentType = paymentType;
+    }
+
+    public int getTransportersId() {
+        return transportersId;
+    }
+
+    public void setTransportersId(int transportersId) {
+        this.transportersId = transportersId;
     }
 }
