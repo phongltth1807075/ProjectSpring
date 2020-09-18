@@ -146,6 +146,24 @@ public class AccountController {
         }
     }
 
+
+    @RequestMapping(method = RequestMethod.DELETE, path = "/deActiveAccount/{id}")
+    public ResponseEntity<Object> deActiveAccount(@PathVariable int id) {
+        Accounts accounts = accountService.getById(id);
+        if (accounts != null) {
+            return new ResponseEntity<>(new RESTResponse.Success()
+                    .setStatus(HttpStatus.OK.value())
+                    .setMessage("DeActive Account Success")
+                    .build(),
+                    HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new RESTResponse.SimpleError()
+                .setCode(HttpStatus.NOT_FOUND.value())
+                .setMessage("Not found")
+                .build(),
+                HttpStatus.NOT_FOUND);
+    }
+
     @RequestMapping(method = RequestMethod.PUT, path = "/{id}")
     public ResponseEntity<Object> update(@PathVariable int id, @RequestBody Accounts accounts) {
         Accounts newAccount = accountService.getById(id);

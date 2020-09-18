@@ -37,6 +37,11 @@ public class AccountService implements UserService {
         return accountRepository.save(accounts);
     }
 
+    public boolean deActiveAccount(Accounts accounts) {
+        accounts.setStatus(Accounts.AccountStatus.Deactive);
+        return true;
+    }
+
     public Accounts getById(int id) {
         Accounts accounts = accountRepository.findByAccountId(id);
         return accounts;
