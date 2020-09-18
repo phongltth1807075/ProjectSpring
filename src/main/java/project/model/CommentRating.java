@@ -4,48 +4,65 @@ package project.model;
 import javax.persistence.*;
 
 @Entity
-public class Rating {
+public class CommentRating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private int productId;
     private int accountId;
     private int value;
+    private String Comment;
     private long createdAt;
     private long updatedAt;
     private long deletedAt;
-    private RatingStatus status;
+    private CommentRatingStatus status;
+
+
+    @OneToOne()
+    @JoinColumn(name = "accountId", insertable = false, updatable = false)
+    private Accounts accounts;
 
     @OneToOne()
     @JoinColumn(name = "productId", insertable = false, updatable = false)
     private Product product;
 
-    @OneToOne()
-    @JoinColumn(name = "accountId", insertable = false, updatable = false)
-    private Accounts account;
-
-
-    public enum RatingStatus {
+    public enum CommentRatingStatus {
         Active, Deactive, Deleted
     }
 
-    public Rating(int id, int productId, int accountId, int value, long createdAt, long updatedAt, long deletedAt, RatingStatus status, Product product, Accounts account) {
+
+    public CommentRating(int id, int productId, int accountId, int value, String comment, long createdAt, long updatedAt, long deletedAt, CommentRatingStatus status, Accounts accounts, Product product) {
         this.id = id;
         this.productId = productId;
         this.accountId = accountId;
         this.value = value;
+        Comment = comment;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;
         this.status = status;
+        this.accounts = accounts;
         this.product = product;
-        this.account = account;
     }
 
-
-    public Rating() {
+    public Accounts getAccounts() {
+        return accounts;
     }
 
+    public void setAccounts(Accounts accounts) {
+        this.accounts = accounts;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public CommentRating() {
+    }
 
     public int getId() {
         return id;
@@ -79,6 +96,14 @@ public class Rating {
         this.value = value;
     }
 
+    public String getComment() {
+        return Comment;
+    }
+
+    public void setComment(String comment) {
+        Comment = comment;
+    }
+
     public long getCreatedAt() {
         return createdAt;
     }
@@ -103,27 +128,11 @@ public class Rating {
         this.deletedAt = deletedAt;
     }
 
-    public RatingStatus getStatus() {
+    public CommentRatingStatus getStatus() {
         return status;
     }
 
-    public void setStatus(RatingStatus status) {
+    public void setStatus(CommentRatingStatus status) {
         this.status = status;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public Accounts getAccount() {
-        return account;
-    }
-
-    public void setAccount(Accounts account) {
-        this.account = account;
     }
 }
