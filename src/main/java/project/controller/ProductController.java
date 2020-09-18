@@ -147,6 +147,25 @@ public class ProductController {
                 HttpStatus.NOT_FOUND);
     }
 
+
+    @RequestMapping(method = RequestMethod.GET, path = "/getListProductById/{id}")
+    public ResponseEntity<Object> getListProductById(@PathVariable int id) {
+        List<Product> productList = productService.productListByProductId(id);
+        if (productList != null){
+            List<ProductDTO> productDTOList = new ArrayList<>();
+            for (int i = 0; i < productList.size(); i++) {
+                ProductDTO productDTO = new ProductDTO(productList.get(i));
+                productDTOList.add(productDTO);
+            }
+            return new ResponseEntity<>(productDTOList, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new RESTResponse.SimpleError()
+                .setCode(HttpStatus.NOT_FOUND.value())
+                .setMessage("Not found or Deleted")
+                .build(),
+                HttpStatus.NOT_FOUND);
+    }
+
     @RequestMapping(method = RequestMethod.GET, path = "/{id}")
     public ResponseEntity<Object> getDetail(@PathVariable int id) {
         Optional<Product> product = productService.getById(id);

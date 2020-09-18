@@ -7,7 +7,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import project.model.Product;
 import project.repository.ProductRepository;
+
 import java.util.Calendar;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,6 +45,11 @@ public class ProductService {
     public Product update(Product product) {
         product.setUpdatedAt(Calendar.getInstance().getTimeInMillis());
         return productRepository.save(product);
+    }
+
+    public List<Product> productListByProductId(int id) {
+        List<Product> list = productRepository.findAllByAccountId(id);
+        return list;
     }
 
 }

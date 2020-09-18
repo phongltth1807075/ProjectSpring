@@ -11,4 +11,6 @@ public interface CommentRepository extends JpaRepository<Comment, Integer>, JpaS
     List<Comment> findAllByProductId(int id);
 
     Comment findById(int id);
+
+    List<Comment> findAllByAccountId(int id);
 }
