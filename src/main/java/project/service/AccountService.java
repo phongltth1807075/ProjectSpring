@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.model.Accounts;
+import project.model.Roles;
 import project.repository.AccountRepository;
 
 import java.util.Calendar;
@@ -41,6 +42,11 @@ public class AccountService implements UserService {
     public List<Accounts> getAccountsList() {
         List<Accounts> accountsList = accountRepository.findAll();
         return accountsList;
+    }
+
+    public List<Roles> getListRoles(int id) {
+        List<Roles> rolesList = accountRepository.getRoles(id);
+        return rolesList;
     }
 
     public Accounts getById(int id) {
