@@ -46,7 +46,7 @@ public class Accounts {
     @OneToMany(mappedBy = "accounts")
     private List<CommentRating> commentRatings;
 
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(name = "account_role",
             joinColumns = @JoinColumn(name = "accountId"),
             inverseJoinColumns = @JoinColumn(name = "roleId")

@@ -34,7 +34,8 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/products").hasAuthority("User")
+//                .antMatchers("/products/**").permitAll()
+                .antMatchers("/products/**").hasAuthority("Admin")
                 .antMatchers("/accounts").permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable()
@@ -43,7 +44,7 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/accounts/login/**", "/accounts/register/**", "/roles/**");
+        web.ignoring().antMatchers("/accounts/login/**", "/accounts/register/**", "/roles/**", "/products/**");
     }
 
 }

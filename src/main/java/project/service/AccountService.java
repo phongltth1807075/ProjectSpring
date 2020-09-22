@@ -9,9 +9,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.model.Accounts;
+import project.model.Roles;
 import project.repository.AccountRepository;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -35,6 +37,10 @@ public class AccountService implements UserService {
         accounts.setPassword(hash);
         accounts.setCreatedAt(Calendar.getInstance().getTimeInMillis());
         return accountRepository.save(accounts);
+    }
+
+    public List<Roles> getRoles(int id) {
+        return accountRepository.getRoles(id);
     }
 
     public Accounts getById(int id) {
