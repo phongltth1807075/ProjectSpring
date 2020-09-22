@@ -12,6 +12,7 @@ import project.model.Accounts;
 import project.repository.AccountRepository;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -35,6 +36,11 @@ public class AccountService implements UserService {
         accounts.setPassword(hash);
         accounts.setCreatedAt(Calendar.getInstance().getTimeInMillis());
         return accountRepository.save(accounts);
+    }
+
+    public List<Accounts> getAccountsList() {
+        List<Accounts> accountsList = accountRepository.findAll();
+        return accountsList;
     }
 
     public Accounts getById(int id) {

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import project.dto.AccountDTO;
+import project.dto.ListAccountDTO;
 import project.model.Accounts;
 import project.model.rest.RESTPagination;
 import project.model.rest.RESTResponse;
@@ -16,6 +17,8 @@ import project.model.specification.ProductSpecification;
 import project.model.specification.SearchCriteria;
 import project.service.AccountService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -28,35 +31,57 @@ public class AccountController {
 
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Object> getList(
-            @RequestParam(value = "keyword", required = false) String keyword,
-            @RequestParam(defaultValue = "1", required = false) int page,
-            @RequestParam(defaultValue = "10", required = false) int limit,
-            @RequestParam(value = "role", required = false) Optional<Integer> role,
-            @RequestParam(value = "gender", required = false) Optional<Integer> gender
-    ) {
-        Specification specification = Specification.where(null);
-        if (keyword != null && keyword.length() > 0) {
-            specification = specification
-                    .and(new ProductSpecification(new SearchCriteria("accountName", "=", keyword)))
-                    .and(new ProductSpecification(new SearchCriteria("phoneNumber", "=", keyword)))
-                    .or(new ProductSpecification(new SearchCriteria("email", "=", keyword)));
+//    public ResponseEntity<Object> getList(
+//            @RequestParam(value = "keyword", required = false) String keyword,
+//            @RequestParam(defaultValue = "1", required = false) int page,
+//            @RequestParam(defaultValue = "10", required = false) int limit,
+//            @RequestParam(value = "role", required = false) Optional<Integer> role,
+//            @RequestParam(value = "gender", required = false) Optional<Integer> gender
+//    ) {
+//        Specification specification = Specification.where(null);
+//        if (keyword != null && keyword.length() > 0) {
+//            specification = specification
+//                    .and(new ProductSpecification(new SearchCriteria("accountName", "=", keyword)))
+//                    .and(new ProductSpecification(new SearchCriteria("phoneNumber", "=", keyword)))
+//                    .or(new ProductSpecification(new SearchCriteria("email", "=", keyword)));
+//        }
+//        if (role.isPresent()) {
+//            specification = specification.and(new AccountSpecification(new SearchCriteria("roleId", "=", role.get())));
+//        }
+//        if (gender.isPresent()) {
+//            specification = specification.and(new AccountSpecification(new SearchCriteria("gender", "=", gender.get())));
+//        }
+//        specification = specification.and(new AccountSpecification(new SearchCriteria("status", "=", Accounts.AccountStatus.Active)));
+//        Page<Accounts> AccountPage = accountService.getList(specification, page, limit);
+//        return new ResponseEntity<>(new RESTResponse.Success()
+//                .setStatus(HttpStatus.OK.value())
+//                .setMessage("Action success!")
+//                .addData(AccountPage.getContent().stream().map(x -> new AccountDTO(x)).collect(Collectors.toList()))
+//                .setPagination(new RESTPagination(page, limit, AccountPage.getTotalPages(), AccountPage.getTotalElements()))
+//                .build(),
+//                HttpStatus.OK);
+//    }
+
+    public ResponseEntity<Object> getAllAccount() {
+        List<AccountDTO> accountDTOList = new ArrayList<>();
+        List<Accounts> list = accountService.getAccountsList();
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                AccountDTO accountDTO = new AccountDTO(list.get(i));
+                accountDTOList.add(accountDTO);
+            }
+            return new ResponseEntity<>(new RESTResponse.Success()
+                    .setStatus(HttpStatus.OK.value())
+                    .setMessage("Simple Success")
+                    .addData(new ListAccountDTO(accountDTOList))
+                    .build(),
+                    HttpStatus.OK);
         }
-        if (role.isPresent()) {
-            specification = specification.and(new AccountSpecification(new SearchCriteria("roleId", "=", role.get())));
-        }
-        if (gender.isPresent()) {
-            specification = specification.and(new AccountSpecification(new SearchCriteria("gender", "=", gender.get())));
-        }
-        specification = specification.and(new AccountSpecification(new SearchCriteria("status", "=", Accounts.AccountStatus.Active)));
-        Page<Accounts> AccountPage = accountService.getList(specification, page, limit);
-        return new ResponseEntity<>(new RESTResponse.Success()
-                .setStatus(HttpStatus.OK.value())
-                .setMessage("Action success!")
-                .addData(AccountPage.getContent().stream().map(x -> new AccountDTO(x)).collect(Collectors.toList()))
-                .setPagination(new RESTPagination(page, limit, AccountPage.getTotalPages(), AccountPage.getTotalElements()))
+        return new ResponseEntity<>(new RESTResponse.SimpleError()
+                .setCode(HttpStatus.NOT_FOUND.value())
+                .setMessage("Not Found")
                 .build(),
-                HttpStatus.OK);
+                HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/register")

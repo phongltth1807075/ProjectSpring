@@ -22,6 +22,10 @@ public class ProductService {
         return productRepository.findAll(specification, PageRequest.of(page - 1, limit));
     }
 
+    public List<Product> getAllProduct() {
+        List<Product> productList = productRepository.findAll();
+        return productList;
+    }
 
     public Product create(Product product) {
         product.setStatus(Product.ProductStatus.Active);
