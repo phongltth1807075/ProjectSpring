@@ -4,15 +4,15 @@ public class Cart {
     private int productId;
     private String productName;
     private int quantity;
-    private double price;
+    private double productPrice;
     private String property;
 
 
-    public Cart(int productId, String productName, int quantity, double price, String property) {
+    public Cart(int productId, String productName, int quantity, double productPrice, String property) {
         this.productId = productId;
         this.productName = productName;
         this.quantity = quantity;
-        this.price = price;
+        this.productPrice = productPrice;
         this.property = property;
     }
 
@@ -43,12 +43,12 @@ public class Cart {
         this.quantity = quantity;
     }
 
-    public double getPrice() {
-        return price;
+    public double getProductPrice() {
+        return productPrice;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setProductPrice(double productPrice) {
+        this.productPrice = productPrice;
     }
 
     public String getProperty() {

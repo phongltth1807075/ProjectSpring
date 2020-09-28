@@ -115,7 +115,7 @@ public class OrderEntityController {
                 int size = shoppingCart.getList().size();
 
                 for (int j = 0; j < shoppingCart.getList().size(); j++) {
-                    totalPrice += shoppingCart.getList().get(j).getQuantity() * shoppingCart.getList().get(j).getPrice();
+                    totalPrice += shoppingCart.getList().get(j).getQuantity() * shoppingCart.getList().get(j).getProductPrice();
 
                 }
                 createOrder.setTotalPrice(totalPrice);
@@ -124,7 +124,7 @@ public class OrderEntityController {
                     OrderDetailEntity createOrderDetail = new OrderDetailEntity();
                     createOrderDetail.setOrderId(createOrder.getId());
                     createOrderDetail.setProductId(shoppingCart.getList().get(z).getProductId());
-                    createOrderDetail.setUnitPrice(shoppingCart.getList().get(z).getPrice());
+                    createOrderDetail.setUnitPrice(shoppingCart.getList().get(z).getProductPrice());
                     createOrderDetail.setQuantity(shoppingCart.getList().get(z).getQuantity());
                     createOrderDetail.setProperty(shoppingCart.getList().get(z).getProperty());
                     orderDetailService.create(createOrderDetail);
@@ -149,7 +149,7 @@ public class OrderEntityController {
                     .setCode(HttpStatus.NOT_FOUND.value())
                     .setMessage("There are products with excess quantity in stock")
                     .build(),
-                    HttpStatus.NOT_FOUND);
+                    HttpStatus.OK);
         }
         return new ResponseEntity<>(new RESTResponse.SimpleError()
                 .setCode(HttpStatus.NOT_FOUND.value())

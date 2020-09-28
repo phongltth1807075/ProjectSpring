@@ -10,12 +10,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import project.dto.ListTransportersDTO;
+import project.dto.TransportersDTO;
 import project.model.Accounts;
 import project.model.Category;
 import project.model.Transporters;
 import project.model.rest.RESTResponse;
 import project.service.TransportersService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -28,12 +32,25 @@ public class TransportersController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Object> getList() {
-        return new ResponseEntity<>(new RESTResponse.Success()
-                .setStatus(HttpStatus.OK.value())
-                .setMessage("Action success!")
-                .addData(transportersService.getList())
+        List<Transporters> transportersList = transportersService.getList();
+        List<TransportersDTO> transportersDTOList = new ArrayList<>();
+        if (transportersList != null) {
+            for (int i = 0; i < transportersList.size(); i++) {
+                TransportersDTO transportersDTO = new TransportersDTO(transportersList.get(i));
+                transportersDTOList.add(transportersDTO);
+            }
+            return new ResponseEntity<>(new RESTResponse.Success()
+                    .setStatus(HttpStatus.OK.value())
+                    .setMessage("Action success!")
+                    .addData(new ListTransportersDTO(transportersDTOList))
+                    .build(),
+                    HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new RESTResponse.SimpleError()
+                .setCode(HttpStatus.NOT_FOUND.value())
+                .setMessage("Not found")
                 .build(),
-                HttpStatus.OK);
+                HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(method = RequestMethod.POST)
