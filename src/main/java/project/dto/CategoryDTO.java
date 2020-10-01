@@ -1,6 +1,7 @@
 package project.dto;
 
 import project.model.Category;
+import project.util.DateTimeUtil;
 
 public class CategoryDTO {
     private int CategoryId;
@@ -11,14 +12,14 @@ public class CategoryDTO {
     private String DeletedAt;
     private Category.CategoryStatus Status;
 
-    public CategoryDTO(int categoryId, String categoryName, String description, String createdAt, String updatedAt, String deletedAt, Category.CategoryStatus status) {
-        CategoryId = categoryId;
-        CategoryName = categoryName;
-        Description = description;
-        CreatedAt = createdAt;
-        UpdatedAt = updatedAt;
-        DeletedAt = deletedAt;
-        Status = status;
+    public CategoryDTO(Category category) {
+        CategoryId = category.getCategoryId();
+        CategoryName = category.getCategoryName();
+        Description = category.getDescription();
+        CreatedAt = DateTimeUtil.formatDateFromLong(category.getCreatedAt());
+        UpdatedAt = DateTimeUtil.formatDateFromLong(category.getUpdatedAt());
+        DeletedAt = DateTimeUtil.formatDateFromLong(category.getDeletedAt());
+        Status = category.getStatus();
     }
 
     public CategoryDTO() {
