@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import project.dto.AccountDTO;
 import project.dto.ListAccountDTO;
 import project.model.Accounts;
+import project.model.Roles;
 import project.model.rest.RESTPagination;
 import project.model.rest.RESTResponse;
 import project.model.specification.AccountSpecification;
@@ -89,10 +90,10 @@ public class AccountController {
         Accounts accountsByEmail = accountService.findByEmail(accounts.getEmail());
         if (accountsByEmail != null) {
             return new ResponseEntity<>(new RESTResponse.SimpleError()
-                    .setCode(HttpStatus.NOT_FOUND.value())
+                    .setCode(HttpStatus.ALREADY_REPORTED.value())
                     .setMessage("Account Already Exist")
                     .build(),
-                    HttpStatus.NOT_FOUND);
+                    HttpStatus.ALREADY_REPORTED);
         } else {
             Accounts saveAccount = accountService.create(accounts);
             if (saveAccount != null) {
@@ -111,6 +112,8 @@ public class AccountController {
             }
         }
     }
+
+
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
     public ResponseEntity<Object> delete(@PathVariable int id) {
@@ -147,8 +150,10 @@ public class AccountController {
     @RequestMapping(method = RequestMethod.GET, path = "/{id}")
     public ResponseEntity<Object> getDetail(@PathVariable int id) {
         Accounts accounts = accountService.getById(id);
+        List<Roles> rolesList = accountService.getListRoles(id);
         if (accounts != null) {
             if (accounts.getStatus() == Accounts.AccountStatus.Active) {
+                accounts.setRolesList(rolesList);
                 return new ResponseEntity<>(new RESTResponse.Success()
                         .setStatus(HttpStatus.OK.value())
                         .setMessage("Success")

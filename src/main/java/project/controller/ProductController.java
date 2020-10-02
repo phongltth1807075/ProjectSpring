@@ -217,6 +217,7 @@ public class ProductController {
     public ResponseEntity<Object> update(@PathVariable int id, @RequestBody DataProducts dataProducts) {
         Optional<Product> productUpdate = productService.getById(id);
         if (productUpdate.isPresent()) {
+
             Product newProduct = productUpdate.get();
             newProduct.setProductName(dataProducts.getProduct().getProductName());
             newProduct.setDescription(dataProducts.getProduct().getDescription());
@@ -225,6 +226,7 @@ public class ProductController {
             newProduct.setStatus(dataProducts.getProduct().getStatus());
             newProduct.setCategoryId(dataProducts.getProduct().getCategoryId());
             Product productupdate = productService.update(newProduct);
+
             if (dataProducts.getImageList() != null) {
                 imageService.hard_erase(id);
                 for (int i = 0; i < dataProducts.getImageList().size(); i++) {

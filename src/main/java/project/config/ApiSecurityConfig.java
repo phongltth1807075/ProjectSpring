@@ -34,8 +34,6 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/products").hasAuthority("User")
-                .antMatchers("/accounts").permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(customAuthEntryPoint);

@@ -36,7 +36,7 @@ public class AccountDTO {
         UpdatedAt = DateTimeUtil.formatDateFromLong(accounts.getUpdatedAt());
         DeletedAt = DateTimeUtil.formatDateFromLong(accounts.getDeletedAt());
         Gender = accounts.getGender();
-        Birthday = DateTimeUtil.formatDateFromLong(accounts.getBirthday());
+        Birthday = accounts.getBirthday();
         Status = accounts.getStatus();
         Password = accounts.getPassword();
         Token = accounts.getToken();
