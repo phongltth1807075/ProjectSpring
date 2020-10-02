@@ -22,7 +22,7 @@ public class Accounts {
     private long updatedAt;
     private long deletedAt;
     private Gender gender;
-    private long birthday;
+    private String birthday;
     private AccountStatus status;
     private String password;
     private String token;
@@ -46,7 +46,7 @@ public class Accounts {
     @OneToMany(mappedBy = "accounts")
     private List<CommentRating> commentRatings;
 
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(name = "account_role",
             joinColumns = @JoinColumn(name = "accountId"),
             inverseJoinColumns = @JoinColumn(name = "roleId")
@@ -57,7 +57,7 @@ public class Accounts {
     public Accounts() {
     }
 
-    public Accounts(int accountId, String accountName, String phoneNumber, String email, String address, long createdAt, long updatedAt, long deletedAt, Gender gender, long birthday, AccountStatus status, String password, String token, Product product, List<OrdersEntity> orderEntity, List<CommentRating> commentRatings, List<Roles> rolesList) {
+    public Accounts(int accountId, String accountName, String phoneNumber, String email, String address, long createdAt, long updatedAt, long deletedAt, Gender gender, String birthday, AccountStatus status, String password, String token, Product product, List<OrdersEntity> orderEntity, List<CommentRating> commentRatings, List<Roles> rolesList) {
         this.accountId = accountId;
         this.accountName = accountName;
         this.phoneNumber = phoneNumber;
@@ -158,11 +158,11 @@ public class Accounts {
         this.gender = gender;
     }
 
-    public long getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(long birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 

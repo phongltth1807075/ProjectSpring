@@ -8,11 +8,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import project.dto.CategoryDTO;
+import project.dto.ListCategoryDTO;
+import project.dto.ListCommentRatingDTO;
 import project.model.Category;
 import project.model.Roles;
 import project.model.rest.RESTResponse;
 import project.service.CategoryService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -24,10 +29,19 @@ public class CategoryController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Object> getList() {
+
+        List<CategoryDTO> categoryDTOList = new ArrayList<>();
+        List<Category> categoryList = categoryService.getList();
+
+        for (int i = 0; i < categoryList.size(); i++) {
+            CategoryDTO categoryDTO = new CategoryDTO(categoryList.get(i));
+            categoryDTOList.add(categoryDTO);
+        }
+
         return new ResponseEntity<>(new RESTResponse.Success()
                 .setStatus(HttpStatus.OK.value())
                 .setMessage("Action success!")
-                .addData(categoryService.getList())
+                .addData(new ListCategoryDTO(categoryDTOList))
                 .build(),
                 HttpStatus.OK);
     }
