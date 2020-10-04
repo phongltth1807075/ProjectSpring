@@ -39,63 +39,91 @@ public class ProductController {
     WarehouseService warehouseService;
 
     @RequestMapping(method = RequestMethod.GET)
-//    public ResponseEntity<Object> getList(
-//            @RequestParam(value = "keyword", required = false) String keyword,
-//            @RequestParam(value = "startPrice", required = false) Optional<Double> startPrice,
-//            @RequestParam(value = "endPrice", required = false) Optional<Double> endPrice,
-//            @RequestParam(defaultValue = "1", required = false) int page,
-//            @RequestParam(defaultValue = "10", required = false) int limit,
-//            @RequestParam(value = "category", required = false) Optional<Integer> category
-//    ) {
-//        Specification specification = Specification.where(null);
-//        if (keyword != null && keyword.length() > 0) {
-//            specification = specification
-//                    .and(new ProductSpecification(new SearchCriteria("productName", "=", keyword)))
-////                    .or(new ProductSpecification(new SearchCriteria("CategoryName", "=", keyword)))
-//                    .or(new ProductSpecification(new SearchCriteria("description", "=", keyword)));
-//        }
-//        if (startPrice.isPresent()) {
-//            specification = specification.and(new ProductSpecification(new SearchCriteria("productPrice", ">=", startPrice.get())));
-//        }
-//        if (endPrice.isPresent()) {
-//            specification = specification.and(new ProductSpecification(new SearchCriteria("productPrice", "<=", endPrice.get())));
-//        }
-//        if (category.isPresent()) {
-//            specification = specification.and(new ProductSpecification(new SearchCriteria("categoryId", "=", category.get())));
-//        }
-//        specification = specification.and(new AccountSpecification(new SearchCriteria("status", "=", Product.ProductStatus.Active)));
-//        Page<Product> ProductPage = productService.getList(specification, page, limit);
-//        return new ResponseEntity<>(new RESTResponse.Success()
-//                .setStatus(HttpStatus.OK.value())
-//                .setMessage("Action success!")
-//                .addData(ProductPage.getContent().stream().map(x -> new ProductDTO(x)).collect(Collectors.toList()))
-//                .setPagination(new RESTPagination(page, limit, ProductPage.getTotalPages(), ProductPage.getTotalElements()))
-//                .build(),
-//                HttpStatus.OK);
-//    }
-
-    public ResponseEntity<Object> getAllProduct() {
+    public ResponseEntity<Object> getList(
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "startPrice", required = false) Optional<Double> startPrice,
+            @RequestParam(value = "endPrice", required = false) Optional<Double> endPrice,
+            @RequestParam(defaultValue = "1", required = false) int page,
+            @RequestParam(defaultValue = "10", required = false) int limit,
+            @RequestParam(value = "category", required = false) Optional<Integer> category
+    ) {
+        Specification specification = Specification.where(null);
+        if (keyword != null && keyword.length() > 0) {
+            specification = specification
+                    .and(new ProductSpecification(new SearchCriteria("productName", "=", keyword)))
+//                    .or(new ProductSpecification(new SearchCriteria("CategoryName", "=", keyword)))
+                    .or(new ProductSpecification(new SearchCriteria("description", "=", keyword)));
+        }
+        if (startPrice.isPresent()) {
+            specification = specification.and(new ProductSpecification(new SearchCriteria("productPrice", ">=", startPrice.get())));
+        }
+        if (endPrice.isPresent()) {
+            specification = specification.and(new ProductSpecification(new SearchCriteria("productPrice", "<=", endPrice.get())));
+        }
+        if (category.isPresent()) {
+            specification = specification.and(new ProductSpecification(new SearchCriteria("categoryId", "=", category.get())));
+        }
+        specification = specification.and(new AccountSpecification(new SearchCriteria("status", "=", Product.ProductStatus.Active)));
+        List<Product> productList = productService.getAllProduct(specification);
         List<ProductDTO> productDTOList = new ArrayList<>();
-        List<Product> productList = productService.getAllProduct();
         if (productList != null) {
             for (int i = 0; i < productList.size(); i++) {
                 ProductDTO productDTO = new ProductDTO(productList.get(i));
                 productDTOList.add(productDTO);
             }
-            return new ResponseEntity<>(new RESTResponse.Success()
-                    .setStatus(HttpStatus.OK.value())
-                    .setMessage("Simple Success")
-                    .addData(new ListProductDTO(productDTOList))
-                    .build(),
-                    HttpStatus.OK);
         }
-        return new ResponseEntity<>(new RESTResponse.SimpleError()
-                .setCode(HttpStatus.NOT_FOUND.value())
-                .setMessage("Not Found")
+        return new ResponseEntity<>(new RESTResponse.Success()
+                .setStatus(HttpStatus.OK.value())
+                .setMessage("Action success!")
+                .addData(productDTOList)
                 .build(),
-                HttpStatus.NOT_FOUND);
+                HttpStatus.OK);
     }
 
+//    public ResponseEntity<Object> getAllProduct() {
+//        List<ProductDTO> productDTOList = new ArrayList<>();
+//        List<Product> productList = productService.getAllProduct();
+//        if (productList != null) {
+//            for (int i = 0; i < productList.size(); i++) {
+//                ProductDTO productDTO = new ProductDTO(productList.get(i));
+//                productDTOList.add(productDTO);
+//            }
+//            return new ResponseEntity<>(new RESTResponse.Success()
+//                    .setStatus(HttpStatus.OK.value())
+//                    .setMessage("Simple Success")
+//                    .addData(new ListProductDTO(productDTOList))
+//                    .build(),
+//                    HttpStatus.OK);
+//        }
+//        return new ResponseEntity<>(new RESTResponse.SimpleError()
+//                .setCode(HttpStatus.NOT_FOUND.value())
+//                .setMessage("Not Found")
+//                .build(),
+//                HttpStatus.NOT_FOUND);
+//    }
+
+//    @RequestMapping(method = RequestMethod.GET, path = "/getProductByCategoryId")
+//    public ResponseEntity<Object> listProductByCategoryId(@RequestParam("categoryId") int categoryId) {
+//        List<Product> productList = productService.getAllProductByCategoryId(categoryId);
+//        List<ProductDTO> productDTOList = new ArrayList<>();
+//        if (productList != null) {
+//            for (int i = 0; i < productList.size(); i++) {
+//                ProductDTO productDTO = new ProductDTO(productList.get(i));
+//                productDTOList.add(productDTO);
+//            }
+//            return new ResponseEntity<>(new RESTResponse.Success()
+//                    .setStatus(HttpStatus.OK.value())
+//                    .setMessage("Simple Success")
+//                    .addData(new ListProductDTO(productDTOList))
+//                    .build(),
+//                    HttpStatus.OK);
+//        }
+//        return new ResponseEntity<>(new RESTResponse.SimpleError()
+//                .setCode(HttpStatus.NOT_FOUND.value())
+//                .setMessage("Not Found")
+//                .build(),
+//                HttpStatus.NOT_FOUND);
+//    }
 
     @RequestMapping(method = RequestMethod.GET, path = "/listImage/{id}")
     public ResponseEntity<Object> listImageByProductId(@PathVariable int id) {

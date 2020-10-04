@@ -114,7 +114,6 @@ public class AccountController {
     }
 
 
-
     @RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
     public ResponseEntity<Object> delete(@PathVariable int id) {
         Accounts exitAccount = accountService.getById(id);

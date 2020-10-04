@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Integer>, JpaSpecificationExecutor<Product> {
     List<Product> findAllByAccountId(int id);
+
+    List<Product> findAllByCategoryId(int id);
 }
