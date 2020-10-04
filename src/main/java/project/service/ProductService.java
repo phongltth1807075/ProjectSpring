@@ -22,8 +22,8 @@ public class ProductService {
         return productRepository.findAll(specification, PageRequest.of(page - 1, limit));
     }
 
-    public List<Product> getAllProduct() {
-        List<Product> productList = productRepository.findAll();
+    public List<Product> getAllProduct(Specification specification) {
+        List<Product> productList = productRepository.findAll(specification);
         return productList;
     }
 
@@ -53,6 +53,11 @@ public class ProductService {
 
     public List<Product> productListByProductId(int id) {
         List<Product> list = productRepository.findAllByAccountId(id);
+        return list;
+    }
+
+    public List<Product> getAllProductByCategoryId(int id) {
+        List<Product> list = productRepository.findAllByCategoryId(id);
         return list;
     }
 
