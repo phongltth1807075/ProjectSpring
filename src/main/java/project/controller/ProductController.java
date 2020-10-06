@@ -3,6 +3,7 @@ package project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,7 +65,7 @@ public class ProductController {
             specification = specification.and(new ProductSpecification(new SearchCriteria("categoryId", "=", category.get())));
         }
         specification = specification.and(new AccountSpecification(new SearchCriteria("status", "=", Product.ProductStatus.Active)));
-        List<Product> productList = productService.getAllProduct(specification);
+        List<Product> productList = productService.getAllProduct(specification,Sort.by(Sort.Direction.DESC,"createdAt"));
         List<ProductDTO> productDTOList = new ArrayList<>();
         if (productList != null) {
             for (int i = 0; i < productList.size(); i++) {
@@ -102,28 +103,28 @@ public class ProductController {
 //                HttpStatus.NOT_FOUND);
 //    }
 
-//    @RequestMapping(method = RequestMethod.GET, path = "/getProductByCategoryId")
-//    public ResponseEntity<Object> listProductByCategoryId(@RequestParam("categoryId") int categoryId) {
-//        List<Product> productList = productService.getAllProductByCategoryId(categoryId);
-//        List<ProductDTO> productDTOList = new ArrayList<>();
-//        if (productList != null) {
-//            for (int i = 0; i < productList.size(); i++) {
-//                ProductDTO productDTO = new ProductDTO(productList.get(i));
-//                productDTOList.add(productDTO);
-//            }
-//            return new ResponseEntity<>(new RESTResponse.Success()
-//                    .setStatus(HttpStatus.OK.value())
-//                    .setMessage("Simple Success")
-//                    .addData(new ListProductDTO(productDTOList))
-//                    .build(),
-//                    HttpStatus.OK);
-//        }
-//        return new ResponseEntity<>(new RESTResponse.SimpleError()
-//                .setCode(HttpStatus.NOT_FOUND.value())
-//                .setMessage("Not Found")
-//                .build(),
-//                HttpStatus.NOT_FOUND);
-//    }
+    @RequestMapping(method = RequestMethod.GET, path = "/getProductByCategoryId/{id}")
+    public ResponseEntity<Object> listProductByCategoryId(@PathVariable int id) {
+        List<Product> productList = productService.getAllProductByCategoryId(id);
+        List<ProductDTO> productDTOList = new ArrayList<>();
+        if (productList != null) {
+            for (int i = 0; i < productList.size(); i++) {
+                ProductDTO productDTO = new ProductDTO(productList.get(i));
+                productDTOList.add(productDTO);
+            }
+            return new ResponseEntity<>(new RESTResponse.Success()
+                    .setStatus(HttpStatus.OK.value())
+                    .setMessage("Simple Success")
+                    .addData(new ListProductDTO(productDTOList))
+                    .build(),
+                    HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new RESTResponse.SimpleError()
+                .setCode(HttpStatus.NOT_FOUND.value())
+                .setMessage("Not Found")
+                .build(),
+                HttpStatus.NOT_FOUND);
+    }
 
     @RequestMapping(method = RequestMethod.GET, path = "/listImage/{id}")
     public ResponseEntity<Object> listImageByProductId(@PathVariable int id) {

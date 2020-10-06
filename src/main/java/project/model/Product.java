@@ -30,6 +30,9 @@ public class Product {
     @OneToOne(mappedBy = "product")
     private Warehouse warehouse;
 
+    @OneToOne(mappedBy = "product")
+    private HotProducts hotProducts;
+
     @OneToMany(mappedBy = "product")
     private List<CommentRating> commentRatings;
 
@@ -50,7 +53,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(int productId, int categoryId, String productName, double productPrice, String description, long createdAt, long updatedAt, long deletedAt, String imageProduct, ProductStatus status, int accountId, Category category, Warehouse warehouse, List<CommentRating> commentRatings, Set<Image> images, Accounts accounts, Set<OrderDetailEntity> orderDetailEntitySet) {
+    public Product(int productId, int categoryId, String productName, double productPrice, String description, long createdAt, long updatedAt, long deletedAt, String imageProduct, ProductStatus status, int accountId, Category category, Warehouse warehouse, HotProducts hotProducts, List<CommentRating> commentRatings, Set<Image> images, Accounts accounts, Set<OrderDetailEntity> orderDetailEntitySet) {
         this.productId = productId;
         this.categoryId = categoryId;
         this.productName = productName;
@@ -64,10 +67,19 @@ public class Product {
         this.accountId = accountId;
         this.category = category;
         this.warehouse = warehouse;
+        this.hotProducts = hotProducts;
         this.commentRatings = commentRatings;
         this.images = images;
         this.accounts = accounts;
         this.orderDetailEntitySet = orderDetailEntitySet;
+    }
+
+    public HotProducts getHotProducts() {
+        return hotProducts;
+    }
+
+    public void setHotProducts(HotProducts hotProducts) {
+        this.hotProducts = hotProducts;
     }
 
     public List<CommentRating> getCommentRatings() {
