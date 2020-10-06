@@ -41,7 +41,7 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/accounts/**","/warehouse/**","/categories/**", "/transporters/**", "/commentRating/**", "/order/**", "/roles/**", "/products/**");
+        web.ignoring().antMatchers("/accounts/**","/warehouse/**","/categories/**", "/transporters/**", "/hotProducts/**","/commentRating/**", "/order/**", "/roles/**", "/products/**");
     }
 
 }

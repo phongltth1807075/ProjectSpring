@@ -3,6 +3,7 @@ package project.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import project.model.Product;
@@ -22,7 +23,7 @@ public class ProductService {
         return productRepository.findAll(specification, PageRequest.of(page - 1, limit));
     }
 
-    public List<Product> getAllProduct(Specification specification) {
+    public List<Product> getAllProduct(Specification specification, Sort createdAt) {
         List<Product> productList = productRepository.findAll(specification);
         return productList;
     }
