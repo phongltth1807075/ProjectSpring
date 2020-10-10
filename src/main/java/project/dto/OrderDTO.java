@@ -9,9 +9,9 @@ public class OrderDTO {
     private int id;
     private int accountId;
     private String accountName;
-    private String createdAt;
-    private String updatedAt;
-    private String deletedAt;
+    private long createdAt;
+    private long updatedAt;
+    private long deletedAt;
     private double totalPrice;
     private OrdersEntity.OrderStatus status;
     private String shipAddress;
@@ -24,9 +24,9 @@ public class OrderDTO {
         ObjectUtil.cloneObject(this, orderEntity);
         this.id = orderEntity.getId();
         this.accountId = orderEntity.getAccountId();
-        this.createdAt = DateTimeUtil.formatDateFromLong(orderEntity.getCreatedAt());
-        this.updatedAt = DateTimeUtil.formatDateFromLong(orderEntity.getUpdatedAt());
-        this.deletedAt = DateTimeUtil.formatDateFromLong(orderEntity.getDeletedAt());
+        this.createdAt = orderEntity.getCreatedAt();
+        this.updatedAt = orderEntity.getUpdatedAt();
+        this.deletedAt = orderEntity.getDeletedAt();
         this.totalPrice = orderEntity.getTotalPrice();
         this.status = orderEntity.getStatus();
         this.shipAddress = orderEntity.getShipAddress();
@@ -71,27 +71,27 @@ public class OrderDTO {
         this.accountId = accountId;
     }
 
-    public String getCreatedAt() {
+    public long getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(long createdAt) {
         this.createdAt = createdAt;
     }
 
-    public String getUpdatedAt() {
+    public long getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(String updatedAt) {
+    public void setUpdatedAt(long updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    public String getDeletedAt() {
+    public long getDeletedAt() {
         return deletedAt;
     }
 
-    public void setDeletedAt(String deletedAt) {
+    public void setDeletedAt(long deletedAt) {
         this.deletedAt = deletedAt;
     }
 

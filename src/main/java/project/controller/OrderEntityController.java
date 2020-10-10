@@ -1,6 +1,11 @@
 package project.controller;
 
 
+import com.paypal.api.payments.Links;
+import com.paypal.api.payments.Payment;
+import com.paypal.base.rest.PayPalRESTException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -8,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import project.config.PaypalPaymentIntent;
+import project.config.PaypalPaymentMethod;
 import project.dto.ListOderDetailDTO;
 import project.dto.OrderDTO;
 import project.dto.OrderDetailDTO;
@@ -19,8 +26,11 @@ import project.model.specification.OrderSpecfication;
 import project.model.specification.SearchCriteria;
 import project.service.OrderDetailService;
 import project.service.OrderService;
+import project.service.PaypalService;
 import project.service.WarehouseService;
+import project.utils.Utils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +39,14 @@ import java.util.stream.Collectors;
 @RequestMapping(path = "/order")
 @Controller
 public class OrderEntityController {
+
+    public static final String URL_PAYPAL_SUCCESS = "pay/success";
+    public static final String URL_PAYPAL_CANCEL = "pay/cancel";
+
+    private Logger log = LoggerFactory.getLogger(getClass());
+
+    @Autowired
+    private PaypalService paypalService;
 
     @Autowired
     OrderService orderService;
@@ -76,7 +94,11 @@ public class OrderEntityController {
 
     @RequestMapping(method = RequestMethod.POST)
 
-    public ResponseEntity<Object> create(@RequestBody ShoppingCart shoppingCart) {
+    public ResponseEntity<Object> create(HttpServletRequest request, @RequestBody ShoppingCart shoppingCart) {
+
+        String cancelUrl = Utils.getBaseURL(request) + "/" + URL_PAYPAL_CANCEL;
+        String successUrl = Utils.getBaseURL(request) + "/" + URL_PAYPAL_SUCCESS;
+
         List<Integer> id = new ArrayList<>();
         List<Double> total = new ArrayList<>();
         List<Double> w = new ArrayList<>();
@@ -143,6 +165,31 @@ public class OrderEntityController {
                         .addData(createOrder)
                         .build(),
                         HttpStatus.CREATED);
+            } else if (shoppingCart.getCartInformation().getPaymentType().equals(OrdersEntity.PaymentType.InternetBanking)) {
+                try {
+                    Payment payment = paypalService.createPayment(
+                            (double) 50,
+                            "USD",
+                            PaypalPaymentMethod.paypal,
+                            PaypalPaymentIntent.sale,
+                            "payment description",
+                            cancelUrl,
+                            successUrl);
+                    for (Links links : payment.getLinks()) {
+                        if (links.getRel().equals("approval_url")) {
+                            return new ResponseEntity<>(new RESTResponse.Success()
+                                    .setMessage("OK" + links.getHref())
+                                    .build(),
+                                    HttpStatus.OK);
+                        }
+                    }
+                } catch (PayPalRESTException e) {
+                    log.error(e.getMessage());
+                }
+                return new ResponseEntity<>(new RESTResponse.Success()
+                        .setMessage("OK")
+                        .build(),
+                        HttpStatus.OK);
             }
         } else {
             return new ResponseEntity<>(new RESTResponse.SimpleError()

@@ -7,18 +7,18 @@ public class CategoryDTO {
     private int CategoryId;
     private String CategoryName;
     private String Description;
-    private String CreatedAt;
-    private String UpdatedAt;
-    private String DeletedAt;
+    private long CreatedAt;
+    private long UpdatedAt;
+    private long DeletedAt;
     private Category.CategoryStatus Status;
 
     public CategoryDTO(Category category) {
         CategoryId = category.getCategoryId();
         CategoryName = category.getCategoryName();
         Description = category.getDescription();
-        CreatedAt = DateTimeUtil.formatDateFromLong(category.getCreatedAt());
-        UpdatedAt = DateTimeUtil.formatDateFromLong(category.getUpdatedAt());
-        DeletedAt = DateTimeUtil.formatDateFromLong(category.getDeletedAt());
+        CreatedAt = category.getCreatedAt();
+        UpdatedAt = category.getUpdatedAt();
+        DeletedAt = category.getDeletedAt();
         Status = category.getStatus();
     }
 
@@ -50,27 +50,27 @@ public class CategoryDTO {
         Description = description;
     }
 
-    public String getCreatedAt() {
+    public long getCreatedAt() {
         return CreatedAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(long createdAt) {
         CreatedAt = createdAt;
     }
 
-    public String getUpdatedAt() {
+    public long getUpdatedAt() {
         return UpdatedAt;
     }
 
-    public void setUpdatedAt(String updatedAt) {
+    public void setUpdatedAt(long updatedAt) {
         UpdatedAt = updatedAt;
     }
 
-    public String getDeletedAt() {
+    public long getDeletedAt() {
         return DeletedAt;
     }
 
-    public void setDeletedAt(String deletedAt) {
+    public void setDeletedAt(long deletedAt) {
         DeletedAt = deletedAt;
     }
 
