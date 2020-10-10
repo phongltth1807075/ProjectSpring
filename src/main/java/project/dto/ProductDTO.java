@@ -13,9 +13,9 @@ public class ProductDTO {
     private String ProductName;
     private double ProductPrice;
     private String Description;
-    private String CreatedAt;
-    private String UpdatedAt;
-    private String DeletedAt;
+    private long CreatedAt;
+    private long UpdatedAt;
+    private long DeletedAt;
     private String ImageProduct;
     private Product.ProductStatus Status;
     private int AccountId;
@@ -31,14 +31,14 @@ public class ProductDTO {
         ProductName = product.getProductName();
         ProductPrice = product.getProductPrice();
         Description = product.getDescription();
-        CreatedAt = DateTimeUtil.formatDateFromLong(product.getCreatedAt());
-        UpdatedAt = DateTimeUtil.formatDateFromLong(product.getUpdatedAt());
-        DeletedAt = DateTimeUtil.formatDateFromLong(product.getDeletedAt());
+        CreatedAt = product.getCreatedAt();
+        UpdatedAt = product.getUpdatedAt();
+        DeletedAt = product.getDeletedAt();
         ImageProduct = product.getImageProduct();
         Status = product.getStatus();
-        categoryDTO.setCreatedAt(DateTimeUtil.formatDateFromLong(product.getCategory().getCreatedAt()));
-        categoryDTO.setDeletedAt(DateTimeUtil.formatDateFromLong(product.getCategory().getDeletedAt()));
-        categoryDTO.setUpdatedAt(DateTimeUtil.formatDateFromLong(product.getCategory().getUpdatedAt()));
+        categoryDTO.setCreatedAt(product.getCategory().getCreatedAt());
+        categoryDTO.setDeletedAt(product.getCategory().getDeletedAt());
+        categoryDTO.setUpdatedAt(product.getCategory().getUpdatedAt());
         categoryDTO.setCategoryId(product.getCategory().getCategoryId());
         categoryDTO.setCategoryName(product.getCategory().getCategoryName());
         categoryDTO.setDescription(product.getCategory().getDescription());
@@ -87,27 +87,27 @@ public class ProductDTO {
         Description = description;
     }
 
-    public String getCreatedAt() {
+    public long getCreatedAt() {
         return CreatedAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(long createdAt) {
         CreatedAt = createdAt;
     }
 
-    public String getUpdatedAt() {
+    public long getUpdatedAt() {
         return UpdatedAt;
     }
 
-    public void setUpdatedAt(String updatedAt) {
+    public void setUpdatedAt(long updatedAt) {
         UpdatedAt = updatedAt;
     }
 
-    public String getDeletedAt() {
+    public long getDeletedAt() {
         return DeletedAt;
     }
 
-    public void setDeletedAt(String deletedAt) {
+    public void setDeletedAt(long deletedAt) {
         DeletedAt = deletedAt;
     }
 

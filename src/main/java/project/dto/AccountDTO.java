@@ -13,9 +13,9 @@ public class AccountDTO {
     private String PhoneNumber;
     private String Email;
     private String Address;
-    private String CreatedAt;
-    private String UpdatedAt;
-    private String DeletedAt;
+    private long CreatedAt;
+    private long UpdatedAt;
+    private long DeletedAt;
     private Accounts.Gender Gender;
     private String Birthday;
     private Accounts.AccountStatus Status;
@@ -32,9 +32,9 @@ public class AccountDTO {
         PhoneNumber = accounts.getPhoneNumber();
         Email = accounts.getEmail();
         Address = accounts.getAddress();
-        CreatedAt = DateTimeUtil.formatDateFromLong(accounts.getCreatedAt());
-        UpdatedAt = DateTimeUtil.formatDateFromLong(accounts.getUpdatedAt());
-        DeletedAt = DateTimeUtil.formatDateFromLong(accounts.getDeletedAt());
+        CreatedAt = accounts.getCreatedAt();
+        UpdatedAt = accounts.getUpdatedAt();
+        DeletedAt = accounts.getDeletedAt();
         Gender = accounts.getGender();
         Birthday = accounts.getBirthday();
         Status = accounts.getStatus();
@@ -84,30 +84,6 @@ public class AccountDTO {
         Address = address;
     }
 
-    public String getCreatedAt() {
-        return CreatedAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        CreatedAt = createdAt;
-    }
-
-    public String getUpdatedAt() {
-        return UpdatedAt;
-    }
-
-    public void setUpdatedAt(String updatedAt) {
-        UpdatedAt = updatedAt;
-    }
-
-    public String getDeletedAt() {
-        return DeletedAt;
-    }
-
-    public void setDeletedAt(String deletedAt) {
-        DeletedAt = deletedAt;
-    }
-
     public Accounts.Gender getGender() {
         return Gender;
     }
@@ -154,5 +130,29 @@ public class AccountDTO {
 
     public void setRolesList(List<Roles> rolesList) {
         this.rolesList = rolesList;
+    }
+
+    public long getCreatedAt() {
+        return CreatedAt;
+    }
+
+    public void setCreatedAt(long createdAt) {
+        CreatedAt = createdAt;
+    }
+
+    public long getUpdatedAt() {
+        return UpdatedAt;
+    }
+
+    public void setUpdatedAt(long updatedAt) {
+        UpdatedAt = updatedAt;
+    }
+
+    public long getDeletedAt() {
+        return DeletedAt;
+    }
+
+    public void setDeletedAt(long deletedAt) {
+        DeletedAt = deletedAt;
     }
 }
