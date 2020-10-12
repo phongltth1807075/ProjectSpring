@@ -5,12 +5,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import project.dto.ListOderDetailDTO;
+import project.dto.ListOrderDTO;
 import project.dto.OrderDTO;
 import project.dto.OrderDetailDTO;
 import project.model.*;
@@ -60,13 +62,17 @@ public class OrderEntityController {
         if (status.isPresent()) {
             specification = specification.and(new AccountSpecification(new SearchCriteria("status", "=", status.get())));
         }
-        Page<OrdersEntity> OrderPage = orderService.getList(specification, page, limit);
-        if (OrderPage != null) {
+        List<OrdersEntity> ordersEntityList = orderService.getList(specification);
+        List<OrderDTO> orderDTOList = new ArrayList<>();
+        if (ordersEntityList != null) {
+            for (int i = 0; i < ordersEntityList.size(); i++) {
+                OrderDTO orderDTO=new OrderDTO(ordersEntityList.get(i));
+                orderDTOList.add(orderDTO);
+            }
             return new ResponseEntity<>(new RESTResponse.Success()
                     .setStatus(HttpStatus.OK.value())
                     .setMessage("Action success!")
-                    .addData(OrderPage.getContent().stream().map(x -> new OrderDTO(x)).collect(Collectors.toList()))
-                    .setPagination(new RESTPagination(page, limit, OrderPage.getTotalPages(), OrderPage.getTotalElements()))
+                    .addData(new ListOrderDTO(orderDTOList))
                     .build(),
                     HttpStatus.OK);
         }
@@ -79,8 +85,7 @@ public class OrderEntityController {
 
     @RequestMapping(method = RequestMethod.POST)
 
-    public ResponseEntity<Object> create(HttpServletRequest request, @RequestBody ShoppingCart shoppingCart) {
-
+    public ResponseEntity<Object> create(@RequestBody ShoppingCart shoppingCart) {
         List<Integer> id = new ArrayList<>();
         List<Double> total = new ArrayList<>();
         List<Double> w = new ArrayList<>();
@@ -115,12 +120,10 @@ public class OrderEntityController {
                 createOrder.setTransportersId(shoppingCart.getCartInformation().getTransportersId());
                 //total price order
                 double totalPrice = 0.0;
-
                 int size = shoppingCart.getList().size();
 
-                for (int j = 0; j < shoppingCart.getList().size(); j++) {
+                for (int j = 0; j < size; j++) {
                     totalPrice += shoppingCart.getList().get(j).getQuantity() * shoppingCart.getList().get(j).getProductPrice();
-
                 }
                 createOrder.setTotalPrice(totalPrice);
                 orderService.create(createOrder);
