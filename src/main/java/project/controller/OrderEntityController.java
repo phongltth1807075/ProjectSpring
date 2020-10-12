@@ -1,11 +1,7 @@
 package project.controller;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +12,6 @@ import project.dto.ListOrderDTO;
 import project.dto.OrderDTO;
 import project.dto.OrderDetailDTO;
 import project.model.*;
-import project.model.rest.RESTPagination;
 import project.model.rest.RESTResponse;
 import project.model.specification.AccountSpecification;
 import project.model.specification.OrderSpecfication;
@@ -25,7 +20,6 @@ import project.service.OrderDetailService;
 import project.service.OrderService;
 import project.service.WarehouseService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -66,7 +60,7 @@ public class OrderEntityController {
         List<OrderDTO> orderDTOList = new ArrayList<>();
         if (ordersEntityList != null) {
             for (int i = 0; i < ordersEntityList.size(); i++) {
-                OrderDTO orderDTO=new OrderDTO(ordersEntityList.get(i));
+                OrderDTO orderDTO = new OrderDTO(ordersEntityList.get(i));
                 orderDTOList.add(orderDTO);
             }
             return new ResponseEntity<>(new RESTResponse.Success()
@@ -91,50 +85,70 @@ public class OrderEntityController {
         List<Double> w = new ArrayList<>();
         List<Warehouse> warehouseList = new ArrayList<>();
         List<Double> min = new ArrayList<>();
+        List<Integer> listSeller = new ArrayList<>();
+        List<Cart> cartList = new ArrayList<>();
+
         for (int i = 0; i < shoppingCart.getList().size(); i++) {
             id.add(shoppingCart.getList().get(i).getProductId());
         }
         List<Integer> quantity = new ArrayList<>();
+
         for (int i = 0; i < shoppingCart.getList().size(); i++) {
             quantity.add(shoppingCart.getList().get(i).getQuantity());
         }
+
         for (int i = 0; i < id.size(); i++) {
             Warehouse warehouse = warehouseService.getById(id.get(i));
             total.add(warehouse.getTotalProduct());
             w.add(total.get(i) - quantity.get(i));
         }
+
         for (int i = 0; i < w.size(); i++) {
             if (w.get(i) < 0) {
                 min.add(w.get(i));
             }
         }
+
+        int size = shoppingCart.getList().size();
+
         if (min.size() <= 0) {
             if (shoppingCart.getCartInformation().getPaymentType().equals(OrdersEntity.PaymentType.Cod)) {
-                OrdersEntity createOrder = new OrdersEntity();
-                createOrder.setAccountId(shoppingCart.getCartInformation().getAccountId());
-                createOrder.setStatus(OrdersEntity.OrderStatus.Pending);
-                createOrder.setPaymentType(OrdersEntity.PaymentType.Cod);
-                createOrder.setShipAddress(shoppingCart.getCartInformation().getShipAddress());
-                createOrder.setShipPhone(shoppingCart.getCartInformation().getShipPhone());
-                createOrder.setAccountId(shoppingCart.getCartInformation().getAccountId());
-                createOrder.setTransportersId(shoppingCart.getCartInformation().getTransportersId());
-                //total price order
-                double totalPrice = 0.0;
-                int size = shoppingCart.getList().size();
-
-                for (int j = 0; j < size; j++) {
-                    totalPrice += shoppingCart.getList().get(j).getQuantity() * shoppingCart.getList().get(j).getProductPrice();
+                for (int i = 0; i < shoppingCart.getList().size(); i++) {
+                    listSeller.add(shoppingCart.getList().get(i).getSellerId());
                 }
-                createOrder.setTotalPrice(totalPrice);
-                orderService.create(createOrder);
-                for (int z = 0; z < size; z++) {
-                    OrderDetailEntity createOrderDetail = new OrderDetailEntity();
-                    createOrderDetail.setOrderId(createOrder.getId());
-                    createOrderDetail.setProductId(shoppingCart.getList().get(z).getProductId());
-                    createOrderDetail.setUnitPrice(shoppingCart.getList().get(z).getProductPrice());
-                    createOrderDetail.setQuantity(shoppingCart.getList().get(z).getQuantity());
-                    createOrderDetail.setProperty(shoppingCart.getList().get(z).getProperty());
-                    orderDetailService.create(createOrderDetail);
+                List<Integer> newList = listSeller.stream().distinct().collect(Collectors.toList());
+                for (int i = 0; i < newList.size(); i++) {
+                    OrdersEntity createOrder = new OrdersEntity();
+                    for (int v = 0; v < shoppingCart.getList().size(); v++) {
+                        if (shoppingCart.getList().get(v).getSellerId() == newList.get(i)) {
+                            createOrder.setAccountId(shoppingCart.getCartInformation().getAccountId());
+                            createOrder.setStatus(OrdersEntity.OrderStatus.Pending);
+                            createOrder.setPaymentType(OrdersEntity.PaymentType.Cod);
+                            createOrder.setShipAddress(shoppingCart.getCartInformation().getShipAddress());
+                            createOrder.setShipPhone(shoppingCart.getCartInformation().getShipPhone());
+                            createOrder.setAccountId(shoppingCart.getCartInformation().getAccountId());
+                            createOrder.setTransportersId(shoppingCart.getCartInformation().getTransportersId());
+                            createOrder.setSellerId(newList.get(i));
+                            double totalPrice = 0.0;
+
+                            for (int j = 0; j < size; j++) {
+                                if (shoppingCart.getList().get(j).getSellerId() == newList.get(i)) {
+                                    totalPrice += shoppingCart.getList().get(j).getQuantity() * shoppingCart.getList().get(j).getProductPrice();
+                                }
+                            }
+                            createOrder.setTotalPrice(totalPrice);
+                            orderService.create(createOrder);
+
+                            OrderDetailEntity createOrderDetail = new OrderDetailEntity();
+                            createOrderDetail.setOrderId(createOrder.getId());
+                            createOrderDetail.setProductId(shoppingCart.getList().get(v).getProductId());
+                            createOrderDetail.setUnitPrice(shoppingCart.getList().get(v).getProductPrice());
+                            createOrderDetail.setQuantity(shoppingCart.getList().get(v).getQuantity());
+                            createOrderDetail.setProperty(shoppingCart.getList().get(v).getProperty());
+                            createOrderDetail.setSellerId(newList.get(i));
+                            orderDetailService.create(createOrderDetail);
+                        }
+                    }
                 }
                 for (int h = 0; h < shoppingCart.getList().size(); h++) {
                     warehouseList.add(warehouseService.getById(shoppingCart.getList().get(h).getProductId()));
@@ -147,10 +161,10 @@ public class OrderEntityController {
                 return new ResponseEntity<>(new RESTResponse.Success()
                         .setStatus(HttpStatus.CREATED.value())
                         .setMessage("Action Success")
-                        .addData(createOrder)
                         .build(),
                         HttpStatus.CREATED);
             } else if (shoppingCart.getCartInformation().getPaymentType().equals(OrdersEntity.PaymentType.InternetBanking)) {
+
 
             }
         } else {

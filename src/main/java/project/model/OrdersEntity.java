@@ -20,6 +20,7 @@ public class OrdersEntity {
     private String shipPhone;
     private int transportersId;
     private PaymentType paymentType;
+    private int sellerId;
 
     public enum OrderStatus {
         Pending, Condirmed, Shipping, Paid, Done, Cancel, Deleted
@@ -45,7 +46,7 @@ public class OrdersEntity {
     }
 
 
-    public OrdersEntity(int id, int accountId, long createdAt, long updatedAt, long deletedAt, double totalPrice, OrderStatus status, String shipAddress, String shipPhone, int transportersId, PaymentType paymentType, Transporters transporters, Set<OrderDetailEntity> orderDetailEntitySet, Accounts accounts) {
+    public OrdersEntity(int id, int accountId, long createdAt, long updatedAt, long deletedAt, double totalPrice, OrderStatus status, String shipAddress, String shipPhone, int transportersId, PaymentType paymentType, int sellerId, Transporters transporters, Set<OrderDetailEntity> orderDetailEntitySet, Accounts accounts) {
         this.id = id;
         this.accountId = accountId;
         this.createdAt = createdAt;
@@ -57,6 +58,7 @@ public class OrdersEntity {
         this.shipPhone = shipPhone;
         this.transportersId = transportersId;
         this.paymentType = paymentType;
+        this.sellerId = sellerId;
         this.transporters = transporters;
         this.orderDetailEntitySet = orderDetailEntitySet;
         this.accounts = accounts;
@@ -173,5 +175,13 @@ public class OrdersEntity {
 
     public void setTransportersId(int transportersId) {
         this.transportersId = transportersId;
+    }
+
+    public int getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(int sellerId) {
+        this.sellerId = sellerId;
     }
 }
