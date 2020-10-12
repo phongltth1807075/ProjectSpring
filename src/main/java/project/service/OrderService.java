@@ -24,8 +24,8 @@ public class OrderService {
     @Autowired
     OrderDetailRepository orderDetailRepository;
 
-    public Page<OrdersEntity> getList(Specification specification, int page, int limit) {
-        return orderRepository.findAll(specification, PageRequest.of(page - 1, limit));
+    public List<OrdersEntity> getList(Specification specification) {
+        return orderRepository.findAll(specification);
     }
 
     public OrdersEntity create(OrdersEntity orderEntity) {
