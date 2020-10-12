@@ -16,6 +16,7 @@ public class OrderDetailEntity {
     private int quantity;
     private double unitPrice;
     private String property;
+    private int sellerId;
 
     @ManyToOne
     @JoinColumn(name = "order_id", insertable = false, updatable = false)
@@ -25,13 +26,15 @@ public class OrderDetailEntity {
     @JoinColumn(name = "product_id", insertable = false, updatable = false)
     private Product product;
 
-    public OrderDetailEntity(int id, int orderId, int productId, int quantity, double unitPrice, String property, OrdersEntity order, Product product) {
+
+    public OrderDetailEntity(int id, int orderId, int productId, int quantity, double unitPrice, String property, int sellerId, OrdersEntity order, Product product) {
         this.id = id;
         this.orderId = orderId;
         this.productId = productId;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
         this.property = property;
+        this.sellerId = sellerId;
         this.order = order;
         this.product = product;
     }
@@ -103,4 +106,11 @@ public class OrderDetailEntity {
         this.property = property;
     }
 
+    public int getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(int sellerId) {
+        this.sellerId = sellerId;
+    }
 }

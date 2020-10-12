@@ -64,7 +64,7 @@ public class ProductController {
         if (category.isPresent()) {
             specification = specification.and(new ProductSpecification(new SearchCriteria("categoryId", "=", category.get())));
         }
-        specification = specification.and(new AccountSpecification(new SearchCriteria("status", "=", Product.ProductStatus.Active)));
+//        specification = specification.and(new AccountSpecification(new SearchCriteria("status", "=", Product.ProductStatus.Active)));
         List<Product> productList = productService.getAllProduct(specification,Sort.by(Sort.Direction.DESC,"createdAt"));
         List<ProductDTO> productDTOList = new ArrayList<>();
         if (productList != null) {
