@@ -18,10 +18,10 @@ public class OrderDTO {
     private String shipPhone;
     private String transportersName;
     private OrdersEntity.PaymentType paymentType;
+    private int sellerId;
 
 
     public OrderDTO(OrdersEntity orderEntity) {
-        ObjectUtil.cloneObject(this, orderEntity);
         this.id = orderEntity.getId();
         this.accountId = orderEntity.getAccountId();
         this.createdAt = orderEntity.getCreatedAt();
@@ -34,6 +34,7 @@ public class OrderDTO {
         this.paymentType = orderEntity.getPaymentType();
         this.accountName = orderEntity.getAccounts().getAccountName();
         this.transportersName = orderEntity.getTransporters().getTransportersName();
+        this.sellerId = orderEntity.getSellerId();
     }
 
     public OrderDTO() {
@@ -133,5 +134,13 @@ public class OrderDTO {
 
     public void setPaymentType(OrdersEntity.PaymentType paymentType) {
         this.paymentType = paymentType;
+    }
+
+    public int getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(int sellerId) {
+        this.sellerId = sellerId;
     }
 }
