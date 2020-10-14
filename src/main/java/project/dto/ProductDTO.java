@@ -19,6 +19,7 @@ public class ProductDTO {
     private String ImageProduct;
     private Product.ProductStatus Status;
     private int AccountId;
+    private double TotalProduct;
 
     public ProductDTO() {
     }
@@ -44,6 +45,7 @@ public class ProductDTO {
         categoryDTO.setDescription(product.getCategory().getDescription());
         categoryDTO.setStatus(product.getCategory().getStatus());
         Category = categoryDTO;
+        TotalProduct = product.getWarehouse().getTotalProduct();
 
     }
 
@@ -133,5 +135,13 @@ public class ProductDTO {
 
     public void setCategory(Object category) {
         Category = category;
+    }
+
+    public double getTotalProduct() {
+        return TotalProduct;
+    }
+
+    public void setTotalProduct(double totalProduct) {
+        TotalProduct = totalProduct;
     }
 }

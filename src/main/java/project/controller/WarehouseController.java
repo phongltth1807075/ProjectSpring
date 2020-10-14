@@ -15,6 +15,8 @@ import project.model.Warehouse;
 import project.model.rest.RESTResponse;
 import project.service.WarehouseService;
 
+import java.util.List;
+
 @Controller
 @RequestMapping(path = "/warehouse")
 public class WarehouseController {
