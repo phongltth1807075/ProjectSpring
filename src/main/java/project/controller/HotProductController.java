@@ -113,4 +113,23 @@ public class HotProductController {
                 .build(),
                 HttpStatus.NOT_FOUND);
     }
+
+    @RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
+    public ResponseEntity<Object> delete(@PathVariable int id) {
+        HotProducts hotProducts = hotProductService.detail(id);
+        if (hotProducts != null) {
+            hotProductService.delete(hotProducts);
+            return new ResponseEntity<>(new RESTResponse.Success()
+                    .setStatus(HttpStatus.OK.value())
+                    .setMessage("Simple Success")
+                    .build(),
+                    HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new RESTResponse.SimpleError()
+                .setCode(HttpStatus.NOT_FOUND.value())
+                .setMessage("Not Found")
+                .build(),
+                HttpStatus.NOT_FOUND);
+    }
+
 }
