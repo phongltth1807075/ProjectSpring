@@ -6,6 +6,9 @@ import project.model.Product;
 public class HotProductDTO {
     private int HotProductId;
     private int productId;
+    private long createdAt;
+    private long updatedAt;
+    private long deletedAt;
     private HotProducts.HotProductStatus status;
     private ProductDTO product;
 
@@ -15,6 +18,9 @@ public class HotProductDTO {
         this.status = hotProducts.getStatus();
         ProductDTO productDTO = new ProductDTO(hotProducts.getProduct());
         this.product = productDTO;
+        this.createdAt = hotProducts.getCreatedAt();
+        this.updatedAt = hotProducts.getUpdatedAt();
+        this.deletedAt = hotProducts.getDeletedAt();
     }
 
     public HotProductDTO() {
@@ -50,5 +56,29 @@ public class HotProductDTO {
 
     public void setProduct(ProductDTO product) {
         this.product = product;
+    }
+
+    public long getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(long createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public long getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(long updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public long getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(long deletedAt) {
+        this.deletedAt = deletedAt;
     }
 }

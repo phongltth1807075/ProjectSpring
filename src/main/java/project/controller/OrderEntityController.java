@@ -86,7 +86,6 @@ public class OrderEntityController {
         List<Warehouse> warehouseList = new ArrayList<>();
         List<Double> min = new ArrayList<>();
         List<Integer> listSeller = new ArrayList<>();
-        List<Cart> cartList = new ArrayList<>();
 
         for (int i = 0; i < shoppingCart.getList().size(); i++) {
             id.add(shoppingCart.getList().get(i).getProductId());
@@ -164,8 +163,56 @@ public class OrderEntityController {
                         .build(),
                         HttpStatus.CREATED);
             } else if (shoppingCart.getCartInformation().getPaymentType().equals(OrdersEntity.PaymentType.InternetBanking)) {
+                for (int i = 0; i < shoppingCart.getList().size(); i++) {
+                    listSeller.add(shoppingCart.getList().get(i).getSellerId());
+                }
+                List<Integer> newList = listSeller.stream().distinct().collect(Collectors.toList());
+                for (int i = 0; i < newList.size(); i++) {
+                    OrdersEntity createOrder = new OrdersEntity();
+                    for (int v = 0; v < shoppingCart.getList().size(); v++) {
+                        if (shoppingCart.getList().get(v).getSellerId() == newList.get(i)) {
+                            createOrder.setAccountId(shoppingCart.getCartInformation().getAccountId());
+                            createOrder.setStatus(OrdersEntity.OrderStatus.Paid);
+                            createOrder.setPaymentType(OrdersEntity.PaymentType.InternetBanking);
+                            createOrder.setShipAddress(shoppingCart.getCartInformation().getShipAddress());
+                            createOrder.setShipPhone(shoppingCart.getCartInformation().getShipPhone());
+                            createOrder.setAccountId(shoppingCart.getCartInformation().getAccountId());
+                            createOrder.setTransportersId(shoppingCart.getCartInformation().getTransportersId());
+                            createOrder.setSellerId(newList.get(i));
+                            double totalPrice = 0.0;
 
+                            for (int j = 0; j < size; j++) {
+                                if (shoppingCart.getList().get(j).getSellerId() == newList.get(i)) {
+                                    totalPrice += shoppingCart.getList().get(j).getQuantity() * shoppingCart.getList().get(j).getProductPrice();
+                                }
+                            }
+                            createOrder.setTotalPrice(totalPrice);
+                            orderService.create(createOrder);
 
+                            OrderDetailEntity createOrderDetail = new OrderDetailEntity();
+                            createOrderDetail.setOrderId(createOrder.getId());
+                            createOrderDetail.setProductId(shoppingCart.getList().get(v).getProductId());
+                            createOrderDetail.setUnitPrice(shoppingCart.getList().get(v).getProductPrice());
+                            createOrderDetail.setQuantity(shoppingCart.getList().get(v).getQuantity());
+                            createOrderDetail.setProperty(shoppingCart.getList().get(v).getProperty());
+                            createOrderDetail.setSellerId(newList.get(i));
+                            orderDetailService.create(createOrderDetail);
+                        }
+                    }
+                }
+                for (int h = 0; h < shoppingCart.getList().size(); h++) {
+                    warehouseList.add(warehouseService.getById(shoppingCart.getList().get(h).getProductId()));
+                }
+                for (int b = 0; b < warehouseList.size(); b++) {
+                    Warehouse warehouse = warehouseList.get(b);
+                    warehouse.setTotalProduct(w.get(b));
+                    warehouseService.update(warehouse);
+                }
+                return new ResponseEntity<>(new RESTResponse.Success()
+                        .setStatus(HttpStatus.CREATED.value())
+                        .setMessage("Action Success")
+                        .build(),
+                        HttpStatus.CREATED);
             }
         } else {
             return new ResponseEntity<>(new RESTResponse.SimpleError()

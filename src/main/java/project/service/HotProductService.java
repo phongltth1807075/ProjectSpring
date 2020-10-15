@@ -6,6 +6,7 @@ import project.model.Category;
 import project.model.HotProducts;
 import project.repository.HotProductRepository;
 
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -21,17 +22,20 @@ public class HotProductService {
 
     public HotProducts create(HotProducts hotProducts) {
         hotProducts.setStatus(HotProducts.HotProductStatus.Deactive);
+        hotProducts.setCreatedAt(Calendar.getInstance().getTimeInMillis());
         return hotProductRepository.save(hotProducts);
     }
 
     public boolean active(HotProducts hotProducts) {
         hotProducts.setStatus(HotProducts.HotProductStatus.Active);
+        hotProducts.setUpdatedAt(Calendar.getInstance().getTimeInMillis());
         hotProductRepository.save(hotProducts);
         return true;
     }
 
     public boolean delete(HotProducts hotProducts) {
         hotProducts.setStatus(HotProducts.HotProductStatus.Deleted);
+        hotProducts.setDeletedAt(Calendar.getInstance().getTimeInMillis());
         hotProductRepository.save(hotProducts);
         return true;
     }
