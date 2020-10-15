@@ -19,7 +19,7 @@ public class CommentRatingService {
 
     public CommentRating create(CommentRating commentRating) {
         commentRating.setCreatedAt(Calendar.getInstance().getTimeInMillis());
-        commentRating.setStatus(CommentRating.CommentRatingStatus.Deactive);
+        commentRating.setStatus(CommentRating.CommentRatingStatus.Active);
         return commentRatingRepository.save(commentRating);
     }
 

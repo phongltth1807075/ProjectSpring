@@ -35,19 +35,12 @@ public class CommentRatingController {
                 commentRatingDTOList.add(commentRatingDTO);
             }
         }
-        if (commentRatingList != null) {
-            return new ResponseEntity<>(new RESTResponse.Success()
-                    .setStatus(HttpStatus.OK.value())
-                    .setMessage("Action success!")
-                    .addData(new ListCommentRatingDTO(commentRatingDTOList))
-                    .build(),
-                    HttpStatus.OK);
-        }
-        return new ResponseEntity<>(new RESTResponse.SimpleError()
-                .setCode(HttpStatus.NOT_FOUND.value())
-                .setMessage("Not found")
+        return new ResponseEntity<>(new RESTResponse.Success()
+                .setStatus(HttpStatus.OK.value())
+                .setMessage("Action success!")
+                .addData(new ListCommentRatingDTO(commentRatingDTOList))
                 .build(),
-                HttpStatus.NOT_FOUND);
+                HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -79,39 +72,39 @@ public class CommentRatingController {
                 HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, path = "/activeCommentRating/{id}")
-    public ResponseEntity<Object> activeCommentRating(@PathVariable int id) {
-        CommentRating commentRating = commentRatingService.getById(id);
-        if (commentRating != null) {
-            return new ResponseEntity<>(new RESTResponse.Success()
-                    .setStatus(HttpStatus.OK.value())
-                    .setMessage("Action success!")
-                    .addData(commentRatingService.activeComment(commentRating))
-                    .build(),
-                    HttpStatus.OK);
-        }
-        return new ResponseEntity<>(new RESTResponse.SimpleError()
-                .setCode(HttpStatus.NOT_FOUND.value())
-                .setMessage("Not found")
-                .build(),
-                HttpStatus.NOT_FOUND);
-    }
+//    @RequestMapping(method = RequestMethod.DELETE, path = "/activeCommentRating/{id}")
+//    public ResponseEntity<Object> activeCommentRating(@PathVariable int id) {
+//        CommentRating commentRating = commentRatingService.getById(id);
+//        if (commentRating != null) {
+//            return new ResponseEntity<>(new RESTResponse.Success()
+//                    .setStatus(HttpStatus.OK.value())
+//                    .setMessage("Action success!")
+//                    .addData(commentRatingService.activeComment(commentRating))
+//                    .build(),
+//                    HttpStatus.OK);
+//        }
+//        return new ResponseEntity<>(new RESTResponse.SimpleError()
+//                .setCode(HttpStatus.NOT_FOUND.value())
+//                .setMessage("Not found")
+//                .build(),
+//                HttpStatus.NOT_FOUND);
+//    }
 
-    @RequestMapping(method = RequestMethod.DELETE, path = "/deleteCommentRating/{id}")
-    public ResponseEntity<Object> delete(@PathVariable int id) {
-        CommentRating commentRating = commentRatingService.getById(id);
-        if (commentRating != null) {
-            return new ResponseEntity<>(new RESTResponse.Success()
-                    .setStatus(HttpStatus.OK.value())
-                    .setMessage("Action success!")
-                    .addData(commentRatingService.delete(commentRating))
-                    .build(),
-                    HttpStatus.OK);
-        }
-        return new ResponseEntity<>(new RESTResponse.SimpleError()
-                .setCode(HttpStatus.NOT_FOUND.value())
-                .setMessage("Not found")
-                .build(),
-                HttpStatus.NOT_FOUND);
-    }
+//    @RequestMapping(method = RequestMethod.DELETE, path = "/deleteCommentRating/{id}")
+//    public ResponseEntity<Object> delete(@PathVariable int id) {
+//        CommentRating commentRating = commentRatingService.getById(id);
+//        if (commentRating != null) {
+//            return new ResponseEntity<>(new RESTResponse.Success()
+//                    .setStatus(HttpStatus.OK.value())
+//                    .setMessage("Action success!")
+//                    .addData(commentRatingService.delete(commentRating))
+//                    .build(),
+//                    HttpStatus.OK);
+//        }
+//        return new ResponseEntity<>(new RESTResponse.SimpleError()
+//                .setCode(HttpStatus.NOT_FOUND.value())
+//                .setMessage("Not found")
+//                .build(),
+//                HttpStatus.NOT_FOUND);
+//    }
 }
