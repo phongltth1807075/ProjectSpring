@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import project.dto.ListOderDetailDTO;
@@ -16,6 +18,7 @@ import project.model.rest.RESTResponse;
 import project.model.specification.AccountSpecification;
 import project.model.specification.OrderSpecfication;
 import project.model.specification.SearchCriteria;
+import project.service.AccountService;
 import project.service.OrderDetailService;
 import project.service.OrderService;
 import project.service.WarehouseService;
@@ -33,10 +36,30 @@ public class OrderEntityController {
     OrderService orderService;
 
     @Autowired
+    private JavaMailSender javaMailSender;
+
+    @Autowired
     OrderDetailService orderDetailService;
 
     @Autowired
     WarehouseService warehouseService;
+
+    @Autowired
+    AccountService accountService;
+
+    private String email;
+
+    void sendEmail(String toEmail, String subject, String content) {
+
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setTo(toEmail);
+
+        msg.setSubject(subject);
+        msg.setText(content);
+
+        javaMailSender.send(msg);
+
+    }
 
 
     @RequestMapping(method = RequestMethod.GET)
@@ -86,6 +109,9 @@ public class OrderEntityController {
         List<Warehouse> warehouseList = new ArrayList<>();
         List<Double> min = new ArrayList<>();
         List<Integer> listSeller = new ArrayList<>();
+        ArrayList<Accounts> accountsArrayList = new ArrayList<>();
+
+        this.email = shoppingCart.getEmail();
 
         for (int i = 0; i < shoppingCart.getList().size(); i++) {
             id.add(shoppingCart.getList().get(i).getProductId());
@@ -116,6 +142,7 @@ public class OrderEntityController {
                     listSeller.add(shoppingCart.getList().get(i).getSellerId());
                 }
                 List<Integer> newList = listSeller.stream().distinct().collect(Collectors.toList());
+
                 for (int i = 0; i < newList.size(); i++) {
                     OrdersEntity createOrder = new OrdersEntity();
                     for (int v = 0; v < shoppingCart.getList().size(); v++) {
@@ -156,6 +183,13 @@ public class OrderEntityController {
                     Warehouse warehouse = warehouseList.get(b);
                     warehouse.setTotalProduct(w.get(b));
                     warehouseService.update(warehouse);
+                }
+                for (int j = 0; j < shoppingCart.getList().size(); j++) {
+                    Accounts accounts = new Accounts(accountService.getById(shoppingCart.getList().get(j).getSellerId()));
+                    accountsArrayList.add(accounts);
+                }
+                for (int j = 0; j < accountsArrayList.size(); j++) {
+                    sendEmail(accountsArrayList.get(j).getEmail(), "New Order !!!", "You have just received a new order please log in for more information !!!");
                 }
                 return new ResponseEntity<>(new RESTResponse.Success()
                         .setStatus(HttpStatus.CREATED.value())
@@ -207,6 +241,13 @@ public class OrderEntityController {
                     Warehouse warehouse = warehouseList.get(b);
                     warehouse.setTotalProduct(w.get(b));
                     warehouseService.update(warehouse);
+                }
+                for (int j = 0; j < shoppingCart.getList().size(); j++) {
+                    Accounts accounts = new Accounts(accountService.getById(shoppingCart.getList().get(j).getSellerId()));
+                    accountsArrayList.add(accounts);
+                }
+                for (int j = 0; j < accountsArrayList.size(); j++) {
+                    sendEmail(accountsArrayList.get(j).getEmail(), "New Order !!!", "You have just received a new order please log in for more information !!!");
                 }
                 return new ResponseEntity<>(new RESTResponse.Success()
                         .setStatus(HttpStatus.CREATED.value())
@@ -267,6 +308,8 @@ public class OrderEntityController {
         if (optionalOrderEntity.isPresent()) {
             OrdersEntity orderEntity = optionalOrderEntity.get();
             orderService.confirmOrder(orderEntity);
+            Accounts accounts = accountService.getById(orderEntity.getAccountId());
+            sendEmail(accounts.getEmail(), "Status Order!!!", "Order with your ID " + orderEntity.getId() + " confirmed by seller !!!");
             return new ResponseEntity<>(new RESTResponse.Success()
                     .setStatus(HttpStatus.OK.value())
                     .setMessage("Simple Success")
@@ -288,6 +331,8 @@ public class OrderEntityController {
         if (orderEntityOptional.isPresent()) {
             OrdersEntity orderEntity = orderEntityOptional.get();
             orderService.shippingOrder(orderEntity);
+            Accounts accounts = accountService.getById(orderEntity.getAccountId());
+            sendEmail(accounts.getEmail(), "Status Order!!!", "Products with your Order " + orderEntity.getId() + "are being shipped to your address !!!");
             return new ResponseEntity<>(new RESTResponse.Success()
                     .setStatus(HttpStatus.OK.value())
                     .setMessage("Simple Success")
@@ -328,6 +373,8 @@ public class OrderEntityController {
         if (orderEntityOptional.isPresent()) {
             OrdersEntity orderEntity = orderEntityOptional.get();
             orderService.paidOrder(orderEntity);
+            Accounts accounts = accountService.getById(orderEntity.getAccountId());
+            sendEmail(accounts.getEmail(), "Status Order!!!", "Order with your ID " + orderEntity.getId() + " confirmed by seller !!!");
             return new ResponseEntity<>(new RESTResponse.Success()
                     .setStatus(HttpStatus.OK.value())
                     .setMessage("Simple Success")
@@ -348,6 +395,8 @@ public class OrderEntityController {
         if (orderEntityOptional.isPresent()) {
             OrdersEntity orderEntity = orderEntityOptional.get();
             orderService.cancelOrder(orderEntity);
+            Accounts accounts = accountService.getById(orderEntity.getAccountId());
+            sendEmail(accounts.getEmail(), "Status Order!!!", "Your order with your ID " + orderEntity.getId() + " has been canceled by the seller, please contact the seller for more information !!!");
             return new ResponseEntity<>(new RESTResponse.Success()
                     .setStatus(HttpStatus.OK.value())
                     .setMessage("Simple Success")
