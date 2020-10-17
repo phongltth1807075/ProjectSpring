@@ -5,10 +5,12 @@ import java.util.List;
 public class ShoppingCart {
     private List<Cart> list;
     private CartInformation cartInformation;
+    private String email;
 
-    public ShoppingCart(List<Cart> list, CartInformation cartInformation) {
+    public ShoppingCart(List<Cart> list, CartInformation cartInformation, String email) {
         this.list = list;
         this.cartInformation = cartInformation;
+        this.email = email;
     }
 
     public ShoppingCart() {
@@ -28,5 +30,13 @@ public class ShoppingCart {
 
     public void setCartInformation(CartInformation cartInformation) {
         this.cartInformation = cartInformation;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

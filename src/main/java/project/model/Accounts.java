@@ -77,6 +77,25 @@ public class Accounts {
         this.rolesList = rolesList;
     }
 
+    public Accounts(Accounts accounts) {
+        this.accountId = accounts.getAccountId();
+        this.accountName = accounts.getAccountName();
+        this.phoneNumber = accounts.getPhoneNumber();
+        this.email = accounts.getEmail();
+        this.address = accounts.getAddress();
+        this.createdAt = accounts.createdAt;
+        this.updatedAt = accounts.updatedAt;
+        this.deletedAt = accounts.getDeletedAt();
+        this.gender = accounts.getGender();
+        this.birthday = accounts.getBirthday();
+        this.status = accounts.getStatus();
+        this.password = accounts.getPassword();
+        this.token = accounts.getToken();
+        this.product = accounts.getProduct();
+        this.orderEntity = accounts.getOrderEntity();
+        this.commentRatings = accounts.getCommentRatings();
+        this.rolesList = accounts.getRolesList();
+    }
 
     public List<CommentRating> getCommentRatings() {
         return commentRatings;
