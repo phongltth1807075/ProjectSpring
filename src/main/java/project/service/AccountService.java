@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.model.Accounts;
+import project.model.Product;
 import project.model.Roles;
 import project.repository.AccountRepository;
 
@@ -23,7 +24,6 @@ public class AccountService implements UserService {
 //    AccountService accountService;
 
 
-
     public Page<Accounts> getList(Specification specification, int page, int limit) {
         return accountRepository.findAll(specification, PageRequest.of(page - 1, limit));
     }
@@ -36,6 +36,7 @@ public class AccountService implements UserService {
         accounts.setCreatedAt(Calendar.getInstance().getTimeInMillis());
         return accountRepository.save(accounts);
     }
+
 
     public List<Accounts> getAccountsList() {
         List<Accounts> accountsList = accountRepository.findAll();

@@ -28,9 +28,15 @@ public class ProductService {
         return productList;
     }
 
+    public Product getProductById(int id) {
+        Product product = productRepository.findAllByProductId(id);
+        return product;
+    }
+
     public Product create(Product product) {
         product.setStatus(Product.ProductStatus.Active);
         product.setCreatedAt(Calendar.getInstance().getTimeInMillis());
+        product.setHotProductStatus(false);
         return productRepository.save(product);
     }
 

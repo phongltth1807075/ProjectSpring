@@ -43,7 +43,6 @@ public class AccountDTO {
         rolesList = accounts.getRolesList();
     }
 
-
     public int getAccountId() {
         return AccountId;
     }

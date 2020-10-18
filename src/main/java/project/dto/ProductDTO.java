@@ -19,6 +19,7 @@ public class ProductDTO {
     private String ImageProduct;
     private Product.ProductStatus Status;
     private int AccountId;
+    private boolean hotProductStatus;
     private double TotalProduct;
 
     public ProductDTO() {
@@ -46,7 +47,15 @@ public class ProductDTO {
         categoryDTO.setStatus(product.getCategory().getStatus());
         Category = categoryDTO;
         TotalProduct = product.getWarehouse().getTotalProduct();
+        hotProductStatus = product.isHotProductStatus();
+    }
 
+    public boolean isHotProductStatus() {
+        return hotProductStatus;
+    }
+
+    public void setHotProductStatus(boolean hotProductStatus) {
+        this.hotProductStatus = hotProductStatus;
     }
 
     public int getAccountId() {

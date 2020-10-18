@@ -20,6 +20,7 @@ public class Product {
     private long deletedAt;
     private String imageProduct;
     private ProductStatus status;
+    private boolean hotProductStatus;
     @Column(name = "account_id")
     private int accountId;
 
@@ -53,7 +54,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(int productId, int categoryId, String productName, double productPrice, String description, long createdAt, long updatedAt, long deletedAt, String imageProduct, ProductStatus status, int accountId, Category category, Warehouse warehouse, HotProducts hotProducts, List<CommentRating> commentRatings, Set<Image> images, Accounts accounts, Set<OrderDetailEntity> orderDetailEntitySet) {
+    public Product(int productId, int categoryId, String productName, double productPrice, String description, long createdAt, long updatedAt, long deletedAt, String imageProduct, ProductStatus status, boolean hotProductStatus, int accountId, Category category, Warehouse warehouse, HotProducts hotProducts, List<CommentRating> commentRatings, Set<Image> images, Accounts accounts, Set<OrderDetailEntity> orderDetailEntitySet) {
         this.productId = productId;
         this.categoryId = categoryId;
         this.productName = productName;
@@ -64,6 +65,7 @@ public class Product {
         this.deletedAt = deletedAt;
         this.imageProduct = imageProduct;
         this.status = status;
+        this.hotProductStatus = hotProductStatus;
         this.accountId = accountId;
         this.category = category;
         this.warehouse = warehouse;
@@ -80,6 +82,14 @@ public class Product {
 
     public void setHotProducts(HotProducts hotProducts) {
         this.hotProducts = hotProducts;
+    }
+
+    public boolean isHotProductStatus() {
+        return hotProductStatus;
+    }
+
+    public void setHotProductStatus(boolean hotProductStatus) {
+        this.hotProductStatus = hotProductStatus;
     }
 
     public List<CommentRating> getCommentRatings() {

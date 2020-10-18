@@ -11,12 +11,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import project.dto.HotProductDTO;
 import project.dto.ListHotProductDTO;
+import project.model.Accounts;
 import project.model.HotProducts;
+import project.model.Product;
 import project.model.rest.RESTResponse;
+import project.service.AccountService;
 import project.service.HotProductService;
+import project.service.ProductService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping(path = "/hotProducts")
@@ -25,9 +30,15 @@ public class HotProductController {
     @Autowired
     HotProductService hotProductService;
 
+    @Autowired
+    ProductService productService;
+
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Object> create(@RequestBody HotProducts hotProducts) {
         HotProducts hotProducts1 = hotProductService.create(hotProducts);
+        Product product = productService.getProductById(hotProducts.getProductId());
+        product.setHotProductStatus(true);
+        productService.update(product);
         return new ResponseEntity<>(new RESTResponse.Success()
                 .setStatus(HttpStatus.CREATED.value())
                 .setMessage("Action Success")
@@ -118,6 +129,9 @@ public class HotProductController {
     public ResponseEntity<Object> delete(@PathVariable int id) {
         HotProducts hotProducts = hotProductService.detail(id);
         if (hotProducts != null) {
+            Product product = productService.getProductById(hotProducts.getProductId());
+            product.setHotProductStatus(false);
+            productService.update(product);
             hotProductService.delete(hotProducts);
             return new ResponseEntity<>(new RESTResponse.Success()
                     .setStatus(HttpStatus.OK.value())
