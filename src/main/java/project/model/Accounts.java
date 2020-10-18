@@ -30,6 +30,7 @@ public class Accounts {
     public enum AccountStatus {
         Active, Deactive, Deleted
     }
+
     public enum Gender {
         Male, Female, Other
     }
@@ -57,7 +58,7 @@ public class Accounts {
     public Accounts() {
     }
 
-    public Accounts(int accountId, String accountName, String phoneNumber, String email, String address, long createdAt, long updatedAt, long deletedAt, Gender gender, String birthday, AccountStatus status, String password, String token, Product product, List<OrdersEntity> orderEntity, List<CommentRating> commentRatings, List<Roles> rolesList) {
+    public Accounts(int accountId, String accountName, String phoneNumber, String email, String address, long createdAt, long updatedAt, long deletedAt, Gender gender, String birthday, AccountStatus status, String password, String token, boolean hotProductStatus, Product product, List<OrdersEntity> orderEntity, List<CommentRating> commentRatings, List<Roles> rolesList) {
         this.accountId = accountId;
         this.accountName = accountName;
         this.phoneNumber = phoneNumber;
@@ -104,6 +105,7 @@ public class Accounts {
     public void setCommentRatings(List<CommentRating> commentRatings) {
         this.commentRatings = commentRatings;
     }
+
 
     public int getAccountId() {
         return accountId;
