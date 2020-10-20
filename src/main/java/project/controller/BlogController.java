@@ -52,6 +52,29 @@ public class BlogController {
                 HttpStatus.NOT_FOUND);
     }
 
+    @RequestMapping(method = RequestMethod.GET, path = "/getAll")
+    public ResponseEntity<Object> getAll() {
+        List<BlogDTO> blogDTOList = new ArrayList<>();
+        List<Blog> list = blogService.getList();
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                BlogDTO blogDTO = new BlogDTO(list.get(i));
+                blogDTOList.add(blogDTO);
+            }
+            return new ResponseEntity<>(new RESTResponse.Success()
+                    .setStatus(HttpStatus.OK.value())
+                    .setMessage("Simple Success")
+                    .addData(new ListBlogDTO(blogDTOList))
+                    .build(),
+                    HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new RESTResponse.SimpleError()
+                .setCode(HttpStatus.NOT_FOUND.value())
+                .setMessage("Not Found")
+                .build(),
+                HttpStatus.NOT_FOUND);
+    }
+
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Object> create(@RequestBody Blog blog) {
         Blog blog1 = blogService.create(blog);
