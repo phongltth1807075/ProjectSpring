@@ -36,8 +36,9 @@ public class BlogService {
         return true;
     }
 
-    public Blog update(Blog blog) {
+    public boolean update(Blog blog) {
         blog.setUpdatedAt(Calendar.getInstance().getTimeInMillis());
-        return blogRepository.save(blog);
+        blogRepository.save(blog);
+        return true;
     }
 }

@@ -134,16 +134,14 @@ public class BlogController {
     public ResponseEntity<Object> update(@PathVariable int id, @RequestBody Blog blog) {
         Blog blog1 = blogService.detail(id);
         if (blog1 != null) {
-            Blog blog2 = new Blog();
-            blog2.setStatus(blog.getStatus());
-            blog2.setDescription(blog.getDescription());
-            blog2.setImage(blog.getImage());
-            blog2.setTitle(blog.getTitle());
-            blogService.update(blog2);
+            blog1.setStatus(blog.getStatus());
+            blog1.setDescription(blog.getDescription());
+            blog1.setImage(blog.getImage());
+            blog1.setTitle(blog.getTitle());
+            blogService.update(blog1);
             return new ResponseEntity<>(new RESTResponse.Success()
                     .setStatus(HttpStatus.OK.value())
                     .setMessage("Simple Success")
-                    .addData(blogService.update(blog2))
                     .build(),
                     HttpStatus.OK);
         }
