@@ -35,6 +35,7 @@ public class TransportersController {
         List<Transporters> transportersList = transportersService.getList();
         List<TransportersDTO> transportersDTOList = new ArrayList<>();
         if (transportersList != null) {
+
             for (int i = 0; i < transportersList.size(); i++) {
                 TransportersDTO transportersDTO = new TransportersDTO(transportersList.get(i));
                 transportersDTOList.add(transportersDTO);
